@@ -1,26 +1,47 @@
 # Jules Workflow Agent
 
+[![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+
 A production-oriented asynchronous Telegram bot that gives a chat-based control surface for the **Jules REST API**. Users can send coding tasks, continue an existing Jules session, choose a connected GitHub repository and branch, inspect activities, approve plans, open the native Jules session, list remote sessions, and safely end sessions from Telegram.
 
 The application targets Python 3.10+, `python-telegram-bot` 20+, `aiohttp`, and `python-dotenv`. Jules is an asynchronous API: a request creates or updates a session quickly, while agent work is reported through activities. The bot therefore combines request methods with activity polling and a polished inline-keyboard UI.
 
 > Jules REST API is currently documented as an experimental `v1alpha` API. Endpoint names and payloads may change as the API evolves. Keep the API base URL configurable and review the official reference before production upgrades.[1]
 
-## Capabilities
+## Table of Contents
+- [Features](#features)
+- [User interface](#user-interface)
+- [Quick Start](#quick-start)
+- [Project layout](#project-layout)
+- [Prerequisites](#prerequisites)
+- [Configuration](#configuration)
+- [Local development](#local-development)
+- [Full local harness: Telegram + browser studio](#full-local-harness-telegram--browser-studio)
+- [Render deployment](#render-deployment)
+- [Jules request lifecycle](#jules-request-lifecycle)
+- [Validation](#validation)
+- [Security and limitations](#security-and-limitations)
+- [Troubleshooting](#troubleshooting)
+- [Contributing](#contributing)
+- [References](#references)
+
+## Features
 
 | Capability | Telegram experience | Jules API operation |
 | --- | --- | --- |
-| Start or continue work | Send any ordinary text message | `POST /sessions`, `POST /sessions/{session}:sendMessage` |
-| Browse repositories | `Repositories` button or `/sources` | `GET /sources` |
-| Choose a branch | Repository selection presents branch buttons | `sourceContext.githubRepoContext.startingBranch` |
-| Inspect a session | `Session status` button or `/session` | `GET /sessions/{session}` |
-| Review progress | `Activities` button or `/activities` | `GET /sessions/{session}/activities` |
-| Approve a plan | Confirmation-protected `Approve plan` button | `POST /sessions/{session}:approvePlan` |
-| Browse remote sessions | `All sessions` button or `/sessions` | `GET /sessions` |
-| Attach another session | Select a session from the list | Local chat-to-session association |
-| End work | Confirmation-protected `End session` button | `DELETE /sessions/{session}` |
-| Open the native Jules UI | `Open in Jules` URL button | Session `url` returned by Jules |
-| Automation | Optional environment setting | `automationMode`, for example `AUTO_CREATE_PR` |
+| **Start or continue work** | Send any ordinary text message | `POST /sessions`, `POST /sessions/{session}:sendMessage` |
+| **Browse repositories** | `Repositories` button or `/sources` | `GET /sources` |
+| **Choose a branch** | Repository selection presents branch buttons | `sourceContext.githubRepoContext.startingBranch` |
+| **Inspect a session** | `Session status` button or `/session` | `GET /sessions/{session}` |
+| **Review progress** | `Activities` button or `/activities` | `GET /sessions/{session}/activities` |
+| **Approve a plan** | Confirmation-protected `Approve plan` button | `POST /sessions/{session}:approvePlan` |
+| **Browse remote sessions**| `All sessions` button or `/sessions` | `GET /sessions` |
+| **Attach another session**| Select a session from the list | Local chat-to-session association |
+| **End work** | Confirmation-protected `End session` button | `DELETE /sessions/{session}` |
+| **Open the native Jules UI**| `Open in Jules` URL button | Session `url` returned by Jules |
+| **Automation** | Optional environment setting | `automationMode`, for example `AUTO_CREATE_PR` |
 
 The bot covers the documented REST capabilities that are appropriate for a Telegram interface. **Connecting a new GitHub repository to Jules is not available through the REST API**; sources are read-only and must first be connected in the Jules web application.[1] [2]
 
@@ -40,6 +61,27 @@ The available commands are:
 | `/activities` | Render the recent Jules activity timeline, including plans and artifacts. |
 | `/sessions` | List recent remote Jules sessions and attach one to the current chat. |
 | `/new` | Confirm and clear the chat's local session association without deleting the remote Jules session. |
+
+## Quick Start
+
+1. **Clone the repository:**
+   ```bash
+   git clone <your-repo-url>
+   cd jules-workflow-agent
+   ```
+2. **Install dependencies:**
+   ```bash
+   make install
+   ```
+3. **Configure the environment:**
+   ```bash
+   cp .env.example .env
+   # Edit .env and set TELEGRAM_BOT_TOKEN and JULES_API_KEY
+   ```
+4. **Run the local harness:**
+   ```bash
+   make dev
+   ```
 
 ## Project layout
 
@@ -256,6 +298,12 @@ The task may still be running. Increase `JULES_REPLY_TIMEOUT_SECONDS`, inspect `
 ### Render starts but Telegram does not deliver messages
 
 Confirm that `WEBHOOK_URL` is the public HTTPS URL without the webhook path, that the service is running, and that no separate polling process is using the same bot token.
+
+## Contributing
+
+We welcome contributions! Please see our [Contributing Guidelines](CONTRIBUTING.md) and [Code of Conduct](CODE_OF_CONDUCT.md) for details on how to get started.
+
+This project uses the [MIT License](LICENSE).
 
 ## References
 
