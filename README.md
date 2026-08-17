@@ -4,13 +4,14 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
-A production-oriented asynchronous Telegram bot that gives a chat-based control surface for the **Jules REST API**. Users can send coding tasks, continue an existing Jules session, choose a connected GitHub repository and branch, inspect activities, approve plans, open the native Jules session, list remote sessions, and safely end sessions from Telegram.
+A production-oriented, provider-neutral agent harness that gives **Telegram and a browser orchestration studio** a shared control surface for the **Jules REST API**. Users can send coding tasks, continue an existing Jules session, choose a connected GitHub repository and branch, inspect activities, approve plans, open the native Jules session, list remote sessions, and safely end sessions from Telegram.
 
 The application targets Python 3.10+, `python-telegram-bot` 20+, `aiohttp`, and `python-dotenv`. Jules is an asynchronous API: a request creates or updates a session quickly, while agent work is reported through activities. The bot therefore combines request methods with activity polling and a polished inline-keyboard UI.
 
 > Jules REST API is currently documented as an experimental `v1alpha` API. Endpoint names and payloads may change as the API evolves. Keep the API base URL configurable and review the official reference before production upgrades.[1]
 
 ## Table of Contents
+- [Studio showcase](#studio-showcase)
 - [Features](#features)
 - [User interface](#user-interface)
 - [Quick Start](#quick-start)
@@ -27,6 +28,34 @@ The application targets Python 3.10+, `python-telegram-bot` 20+, `aiohttp`, and 
 - [Contributing](#contributing)
 - [References](#references)
 
+## Studio showcase
+
+> **Jules Workflow Studio** is the browser control room for the same local harness that powers the Telegram bot. It keeps task routing, provider state, and the local audit trail in one operational workspace without exposing Jules or Telegram credentials to the browser.
+
+![Jules Workflow Studio workspace with a live conversation, operational signals, active agent card, source selector, and recent event stream.](docs/images/studio-workspace.webp)
+
+*The workspace view combines the conversation canvas, task composer, active agent, repository context, session pulse, and live local signals in one view.*
+
+| View | What it demonstrates | Why it matters |
+| --- | --- | --- |
+| **Workspace** | Asynchronous prompt submission, completed agent replies, repository and branch selection, agent readiness, and local dashboard signals. | Operators can see what was requested, which agent owns it, and whether a reply has arrived without leaving the control room. |
+| **Session ledger** | Remote Jules sessions with their title, repository, branch, status, identifier, and native Jules deep link. | Existing work can be inspected or resumed instead of creating duplicate sessions. |
+| **Workflow activity** | Append-only activity captured to local JSONL and Markdown, including source changes, submissions, completed replies, failures, and session events. | The harness preserves a compact, filesystem-backed record of decisions and outcomes without requiring a database. |
+
+### Session ledger
+
+![Jules Workflow Studio session ledger showing active and completed remote sessions with connected repositories, branches, state, identifiers, and native Jules links.](docs/images/studio-sessions.webp)
+
+*The session ledger makes remote work legible: each row maps a Jules session to its source context and offers a direct route to the native Jules session.*
+
+### Local audit trail
+
+![Jules Workflow Studio activity timeline showing local append-only events for source selection, prompt submission, successful replies, failures, and session changes.](docs/images/studio-activity.webp)
+
+*The activity view renders the persisted local audit trail. It is designed for tracing agent work, not for inventing customer-facing analytics.*
+
+The Studio accepts a prompt immediately and displays it as in flight while Jules works asynchronously. When the provider reports a new activity, the harness persists the reply and the browser appends it to the conversation. This avoids tying the interactive UI to a single long-lived HTTP request while retaining an explicit, local record of the full task lifecycle.[4]
+
 ## Features
 
 | Capability | Telegram experience | Jules API operation |
@@ -42,6 +71,7 @@ The application targets Python 3.10+, `python-telegram-bot` 20+, `aiohttp`, and 
 | **End work** | Confirmation-protected `End session` button | `DELETE /sessions/{session}` |
 | **Open the native Jules UI**| `Open in Jules` URL button | Session `url` returned by Jules |
 | **Automation** | Optional environment setting | `automationMode`, for example `AUTO_CREATE_PR` |
+| **Browser orchestration** | Next.js Studio backed by FastAPI | Shared `AgentHarness` routing, live local events, and source/session control |
 
 The bot covers the documented REST capabilities that are appropriate for a Telegram interface. **Connecting a new GitHub repository to Jules is not available through the REST API**; sources are read-only and must first be connected in the Jules web application.[1] [2]
 
@@ -87,6 +117,9 @@ The available commands are:
 
 ```text
 jules-workflow-agent/
+├── apps/
+│   ├── api/                            # FastAPI browser control plane
+│   └── web/                            # Next.js Jules Workflow Studio
 ├── src/
 │   ├── __init__.py
 │   ├── config.py
@@ -103,6 +136,13 @@ jules-workflow-agent/
 │   └── main.py                       # Composition root and lifecycle
 ├── tests/
 │   └── test_harness.py
+├── docs/
+│   ├── images/                         # README showcase screenshots
+│   ├── JULES_API_REFERENCE_NOTES.md
+│   ├── LOCAL_HARNESS.md
+│   └── VERIFICATION.md
+├── scripts/
+│   └── run_local.py                    # Signal-safe concurrent launcher
 ├── ARCHITECTURE.md
 ├── .env.example
 ├── .gitignore
@@ -161,7 +201,7 @@ The two required values are `TELEGRAM_BOT_TOKEN` and `JULES_API_KEY`.
 | `WEBHOOK_SECRET_TOKEN` | No | Telegram webhook secret token. |
 | `JULES_TIMEOUT_SECONDS` | No | Maximum duration for one HTTP request; defaults to `60`. |
 | `JULES_POLL_INTERVAL_SECONDS` | No | Delay between activity polls; defaults to `2`. |
-| `JULES_REPLY_TIMEOUT_SECONDS` | No | Maximum wait for a text response; defaults to `120`. |
+| `JULES_REPLY_TIMEOUT_SECONDS` | No | Maximum background wait for a text response; defaults to `300`. |
 | `LOG_LEVEL` | No | Python logging level; defaults to `INFO`. |
 
 ## Local development
@@ -203,6 +243,12 @@ make dev
 
 Open `http://127.0.0.1:3000` for the orchestration studio and `http://127.0.0.1:8090/docs` for local API documentation. The studio provides a warm, Claude-inspired workflow workspace with chat composer, agent selection, repository and branch controls, session overview, activity timeline, local transcript access, and dashboard operational signals. The FastAPI service remains bound to loopback by default; the browser does not receive a Jules or Telegram credential.
 
+| Surface | Operator flow | Durable local record |
+| --- | --- | --- |
+| **Telegram** | Send tasks, select sources and branches, inspect activities, approve plans, and open native Jules sessions. | Per-chat association and agent selection. |
+| **Studio workspace** | Submit a task, keep working while it is pending, then review the completed reply in the same transcript. | Prompt submissions, replies, failures, and source changes. |
+| **Session and activity views** | Browse remote sessions and trace the local orchestration timeline. | JSON state, append-only JSONL events, and Markdown journals. |
+
 The local event store writes every browser action and response to ignored files below `runtime/`:
 
 ```text
@@ -237,6 +283,8 @@ A Render Background Worker can use the same commands with `WEBHOOK_URL` empty, w
 ## Jules request lifecycle
 
 For a new chat task, Telegram delegates to the application harness rather than calling Jules directly. The harness selects the active adapter, serializes requests per chat, stores provider-neutral conversation state, and delegates the prompt to the adapter. The Jules adapter selects the chat's repository and branch if configured, calls `POST /sessions`, stores the returned session resource name, and polls activities until a new agent message or failure is observed. Follow-up messages call `:sendMessage` and poll only for new activity. Status and activity buttons retrieve fresh provider data rather than relying only on cached UI text.
+
+The Studio follows the same domain workflow but returns a short acceptance payload before the remote agent finishes. It persists the requested prompt, starts a bounded background poll, records the Jules session name as soon as it is assigned, and appends either `message.completed` or `message.failed` when work settles. Initial activity-list propagation delays are retried within the bounded polling window so that a newly created session does not appear as a false task failure.[3] [4]
 
 Adding another agent should require a new adapter implementing the contract in `src/domain/agent.py`, registration in `src/main.py`, and provider-specific tests. Telegram commands, callback routing, state locking, and the active-agent UI remain unchanged.
 
