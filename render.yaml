@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: my-telegram-bot
+    name: jules-workflow-agent
     runtime: python
     plan: free
     region: singapore
@@ -19,6 +19,14 @@ services:
         generateValue: true
       - key: JULES_API_URL
         value: https://jules.googleapis.com/v1alpha
+      - key: JULES_SOURCE
+        sync: false
+      - key: JULES_STARTING_BRANCH
+        value: main
+      - key: JULES_REQUIRE_PLAN_APPROVAL
+        value: "false"
+      - key: JULES_AUTOMATION_MODE
+        sync: false
       - key: JULES_TIMEOUT_SECONDS
         value: "60"
       - key: JULES_POLL_INTERVAL_SECONDS

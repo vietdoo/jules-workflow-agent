@@ -6,14 +6,27 @@ import logging
 import sys
 
 from telegram import Update
-from telegram.ext import Application, ApplicationBuilder, CommandHandler, MessageHandler, filters
+from telegram.ext import (
+    Application,
+    ApplicationBuilder,
+    CallbackQueryHandler,
+    CommandHandler,
+    MessageHandler,
+    filters,
+)
 
 from src.api.jules_client import JulesClient
 from src.config import ConfigurationError, Settings, get_settings
 from src.handlers.message_handlers import (
+    activities_command,
+    callback_handler,
     error_handler,
     help_command,
     message_handler,
+    new_session_command,
+    session_command,
+    sessions_command,
+    sources_command,
     start_command,
 )
 
@@ -51,6 +64,12 @@ def build_application(settings: Settings) -> Application:
 
     application.add_handler(CommandHandler("start", start_command))
     application.add_handler(CommandHandler("help", help_command))
+    application.add_handler(CommandHandler("sources", sources_command))
+    application.add_handler(CommandHandler("session", session_command))
+    application.add_handler(CommandHandler("activities", activities_command))
+    application.add_handler(CommandHandler("sessions", sessions_command))
+    application.add_handler(CommandHandler("new", new_session_command))
+    application.add_handler(CallbackQueryHandler(callback_handler))
     application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, message_handler))
     application.add_error_handler(error_handler)
     return application

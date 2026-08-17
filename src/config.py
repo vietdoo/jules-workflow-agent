@@ -35,6 +35,10 @@ class Settings:
     jules_reply_timeout_seconds: float
     log_level: str
     webhook_secret_token: str | None
+    jules_source: str | None
+    jules_starting_branch: str
+    jules_require_plan_approval: bool
+    jules_automation_mode: str | None
 
     @property
     def use_webhook(self) -> bool:
@@ -81,6 +85,19 @@ def _positive_int(name: str, default: int) -> int:
     return value
 
 
+def _boolean(name: str, default: bool) -> bool:
+    """Read a human-friendly boolean environment variable."""
+
+    raw_value = os.getenv(name, str(default)).strip().lower()
+    if raw_value in {"1", "true", "yes", "on"}:
+        return True
+    if raw_value in {"0", "false", "no", "off"}:
+        return False
+    raise ConfigurationError(
+        f"{name} must be one of true/false, yes/no, or 1/0; got {raw_value!r}."
+    )
+
+
 @lru_cache(maxsize=1)
 def get_settings() -> Settings:
     """Load and validate settings once for the lifetime of the process."""
@@ -103,4 +120,8 @@ def get_settings() -> Settings:
         ),
         log_level=os.getenv("LOG_LEVEL", "INFO").strip().upper(),
         webhook_secret_token=os.getenv("WEBHOOK_SECRET_TOKEN", "").strip() or None,
+        jules_source=os.getenv("JULES_SOURCE", "").strip() or None,
+        jules_starting_branch=os.getenv("JULES_STARTING_BRANCH", "main").strip() or "main",
+        jules_require_plan_approval=_boolean("JULES_REQUIRE_PLAN_APPROVAL", False),
+        jules_automation_mode=os.getenv("JULES_AUTOMATION_MODE", "").strip() or None,
     )
