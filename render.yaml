@@ -1,0 +1,29 @@
+services:
+  - type: web
+    name: my-telegram-bot
+    runtime: python
+    plan: free
+    region: singapore
+    buildCommand: pip install -r requirements.txt
+    startCommand: python -m src.main
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.9
+      - key: TELEGRAM_BOT_TOKEN
+        sync: false
+      - key: JULES_API_KEY
+        sync: false
+      - key: WEBHOOK_URL
+        sync: false
+      - key: WEBHOOK_SECRET_TOKEN
+        generateValue: true
+      - key: JULES_API_URL
+        value: https://jules.googleapis.com/v1alpha
+      - key: JULES_TIMEOUT_SECONDS
+        value: "60"
+      - key: JULES_POLL_INTERVAL_SECONDS
+        value: "2"
+      - key: JULES_REPLY_TIMEOUT_SECONDS
+        value: "120"
+      - key: LOG_LEVEL
+        value: INFO
