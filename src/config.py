@@ -14,7 +14,10 @@ DEFAULT_JULES_API_URL: Final[str] = "https://jules.googleapis.com/v1alpha"
 DEFAULT_PORT: Final[int] = 8080
 DEFAULT_JULES_TIMEOUT_SECONDS: Final[float] = 60.0
 DEFAULT_JULES_POLL_INTERVAL_SECONDS: Final[float] = 2.0
-DEFAULT_JULES_REPLY_TIMEOUT_SECONDS: Final[float] = 120.0
+# Jules can spend several minutes inspecting a repository before its first
+# agent-authored activity appears. Web callers now receive an immediate
+# acceptance event, while the worker retains this bounded asynchronous window.
+DEFAULT_JULES_REPLY_TIMEOUT_SECONDS: Final[float] = 300.0
 DEFAULT_WEB_API_PORT: Final[int] = 8090
 DEFAULT_LOCAL_DATA_DIR: Final[str] = "runtime"
 

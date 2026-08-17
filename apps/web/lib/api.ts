@@ -1,3 +1,4 @@
+/** Studio browser calls stay same-origin while agent work completes asynchronously. */
 import type { Agent, Dashboard, EventRecord, Session, Source, WorkspaceState } from "./types";
 
 /**
@@ -50,7 +51,7 @@ export const controlApi = {
   resetSession: (conversationId: string) =>
     request<WorkspaceState>("/api/sessions/reset", { method: "POST", body: { conversation_id: conversationId } }),
   sendMessage: (conversationId: string, prompt: string) =>
-    request<{ reply: { text: string; agent_id: string }; session?: Session | null; state: WorkspaceState }>(
+    request<{ accepted: boolean; submission_id: string; state: WorkspaceState }>(
       "/api/messages",
       { method: "POST", body: { conversation_id: conversationId, prompt } },
     ),

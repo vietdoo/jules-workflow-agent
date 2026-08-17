@@ -1,4 +1,5 @@
 "use client";
+// Design reminder: preserve the warm, calm control-room aesthetic while making long-running Jules work legible.
 
 import {
   Activity,
@@ -55,13 +56,15 @@ function stateTone(state?: string | null): string {
   return "slate";
 }
 
-function eventToMessage(event: EventRecord): ChatMessage | null {
+function eventToMessage(event: EventRecord, settledSubmissionIds: Set<string>): ChatMessage | null {
   if (event.type === "message.submitted") {
     return {
       id: event.id,
       role: "operator",
       text: String(event.data.prompt ?? event.summary),
       timestamp: event.timestamp,
+      isPending: !settledSubmissionIds.has(event.id),
+      submissionId: event.id,
     };
   }
   if (event.type === "message.completed") {
@@ -70,9 +73,32 @@ function eventToMessage(event: EventRecord): ChatMessage | null {
       role: "agent",
       text: String(event.data.reply ?? event.summary),
       timestamp: event.timestamp,
+      submissionId: String(event.data.submitted_event_id ?? ""),
+    };
+  }
+  if (event.type === "message.failed") {
+    return {
+      id: event.id,
+      role: "system",
+      text: `Jules could not complete this task: ${event.summary}`,
+      timestamp: event.timestamp,
+      submissionId: String(event.data.submitted_event_id ?? ""),
     };
   }
   return null;
+}
+
+function messagesFromEvents(events: EventRecord[]): ChatMessage[] {
+  const settledSubmissionIds = new Set(
+    events
+      .filter((event) => event.type === "message.completed" || event.type === "message.failed")
+      .map((event) => String(event.data.submitted_event_id ?? ""))
+      .filter(Boolean),
+  );
+  return events
+    .map((event) => eventToMessage(event, settledSubmissionIds))
+    .filter((item): item is ChatMessage => item !== null)
+    .reverse();
 }
 
 export function StudioShell() {
@@ -109,7 +135,7 @@ export function StudioShell() {
       setSources(nextSources);
       setSessions(nextSessions);
       setEvents(nextEvents);
-      setMessages(nextEvents.map(eventToMessage).filter((item): item is ChatMessage => item !== null).reverse());
+      setMessages(messagesFromEvents(nextEvents));
       setError(null);
     } catch (caught) {
       setError(caught instanceof Error ? caught.message : "The local control plane is unavailable.");
@@ -128,9 +154,14 @@ export function StudioShell() {
     socket.onmessage = (message) => {
       const event = JSON.parse(message.data) as EventRecord;
       setEvents((current) => [event, ...current.filter((item) => item.id !== event.id)].slice(0, 100));
-      const chatMessage = eventToMessage(event);
+      const chatMessage = eventToMessage(event, new Set());
       if (chatMessage) {
-        setMessages((current) => [...current.filter((item) => item.id !== chatMessage.id), chatMessage]);
+        setMessages((current) => {
+          const withSettledPrompt = chatMessage.submissionId
+            ? current.map((item) => item.submissionId === chatMessage.submissionId ? { ...item, isPending: false } : item)
+            : current;
+          return [...withSettledPrompt.filter((item) => item.id !== chatMessage.id), chatMessage];
+        });
       }
     };
     return () => socket.close();
@@ -182,9 +213,8 @@ export function StudioShell() {
     try {
       const result = await controlApi.sendMessage(CONVERSATION_ID, nextPrompt);
       setMessages((current) => [
-        ...current.filter((item) => item.id !== optimistic.id),
-        { ...optimistic, isPending: false },
-        { id: `reply-${Date.now()}`, role: "agent", text: result.reply.text, timestamp: new Date().toISOString() },
+        ...current.filter((item) => item.id !== optimistic.id && item.id !== result.submission_id),
+        { ...optimistic, id: result.submission_id, isPending: true, submissionId: result.submission_id },
       ]);
       setDashboard((current) => (current ? { ...current, state: result.state } : current));
       await hydrate(true);
@@ -345,7 +375,9 @@ function Metric({ label, value, hint, danger }: { label: string; value: number; 
 
 function ChatBubble({ message, agent }: { message: ChatMessage; agent?: Agent }) {
   const isOperator = message.role === "operator";
-  return <article className={`message ${isOperator ? "message--operator" : ""}`}><div className="message-avatar">{isOperator ? "V" : agent?.icon || "J"}</div><div><div className="message-meta"><strong>{isOperator ? "You" : agent?.display_name ?? "Agent"}</strong><span>{formatTime(message.timestamp)}</span></div><p>{message.text}</p></div></article>;
+  const isSystem = message.role === "system";
+  const label = isOperator ? "You" : isSystem ? "Harness" : agent?.display_name ?? "Agent";
+  return <article className={`message ${isOperator ? "message--operator" : ""} ${isSystem ? "message--system" : ""}`}><div className="message-avatar">{isOperator ? "V" : isSystem ? "!" : agent?.icon || "J"}</div><div><div className="message-meta"><strong>{label}</strong><span>{formatTime(message.timestamp)}</span></div><p>{message.text}</p></div></article>;
 }
 
 function SessionCard({ session, active, onApprove }: { session: Session; active: boolean; onApprove: () => void }) {

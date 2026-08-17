@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import tempfile
+import time
 import unittest
 from pathlib import Path
 from typing import Any
@@ -107,7 +108,7 @@ class ControlPlaneApiTests(unittest.TestCase):
     """Verify browser-facing API shapes and local transcript recording."""
 
     def test_dashboard_context_prompt_and_journal_workflow(self) -> None:
-        """The browser can inspect context, select source, send prompt, and read events."""
+        """The browser receives an acceptance before its journal records the agent reply."""
 
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
@@ -130,10 +131,18 @@ class ControlPlaneApiTests(unittest.TestCase):
                     json={"conversation_id": "web:local", "prompt": "Summarize the change."},
                 )
                 self.assertEqual(reply.status_code, 200)
-                self.assertEqual(reply.json()["reply"]["text"], "Echo: Summarize the change.")
+                self.assertTrue(reply.json()["accepted"])
+                self.assertTrue(reply.json()["submission_id"])
 
-                events = client.get("/api/events").json()
+                events: list[dict[str, Any]] = []
+                for _ in range(20):
+                    events = client.get("/api/events").json()
+                    if any(item["type"] == "message.completed" for item in events):
+                        break
+                    time.sleep(0.01)
                 self.assertEqual([item["type"] for item in events[:2]], ["message.completed", "message.submitted"])
+                self.assertEqual(events[0]["data"]["reply"], "Echo: Summarize the change.")
+                self.assertEqual(events[0]["data"]["submitted_event_id"], reply.json()["submission_id"])
 
 
 if __name__ == "__main__":

@@ -1,7 +1,8 @@
-"""Provider-neutral use cases exposed by the local FastAPI control plane."""
+"""Control-plane use cases that acknowledge Studio tasks before provider replies arrive."""
 
 from __future__ import annotations
 
+import asyncio
 from dataclasses import asdict
 from typing import Any
 
@@ -40,6 +41,7 @@ class LocalControlPlane:
         self.harness = harness
         self.state_store = state_store
         self.events = events
+        self._inflight: dict[str, asyncio.Task[None]] = {}
 
     def _state_payload(self, conversation_id: ConversationId) -> dict[str, Any]:
         state = self.harness.state_for(conversation_id)
@@ -130,14 +132,18 @@ class LocalControlPlane:
 
         return await self.harness.list_activities(conversation_id, session_name)
 
-    async def send_message(self, conversation_id: ConversationId, prompt: str) -> dict[str, Any]:
-        """Route a prompt to the active agent and append the full local audit trail."""
+    async def submit_message(self, conversation_id: ConversationId, prompt: str) -> dict[str, Any]:
+        """Accept one Studio task and record its eventual provider result in the journal."""
 
         clean_prompt = prompt.strip()
         if not clean_prompt:
             raise ValueError("Prompt must not be empty.")
+        conversation_key = str(conversation_id)
+        if task := self._inflight.get(conversation_key):
+            if not task.done():
+                raise ValueError("Jules is still processing the previous task in this conversation.")
         state = self.harness.state_for(conversation_id)
-        await self.events.record(
+        submitted = await self.events.record(
             "message.submitted",
             conversation_id=conversation_id,
             agent_id=state.active_agent_id,
@@ -145,8 +151,40 @@ class LocalControlPlane:
             summary=clean_prompt[:160],
             data={"prompt": clean_prompt},
         )
+        task = asyncio.create_task(
+            self._complete_message(
+                conversation_id=conversation_id,
+                prompt=clean_prompt,
+                submitted_event_id=submitted["id"],
+            ),
+            name=f"agent-message:{conversation_key}",
+        )
+        self._inflight[conversation_key] = task
+        task.add_done_callback(lambda finished: self._discard_inflight(conversation_key, finished))
+        return {
+            "accepted": True,
+            "submission_id": submitted["id"],
+            "state": self._state_payload(conversation_id),
+        }
+
+    def _discard_inflight(self, conversation_key: str, task: asyncio.Task[None]) -> None:
+        """Remove a settled worker without replacing a newer task for the conversation."""
+
+        if self._inflight.get(conversation_key) is task:
+            self._inflight.pop(conversation_key, None)
+
+    async def _complete_message(
+        self,
+        *,
+        conversation_id: ConversationId,
+        prompt: str,
+        submitted_event_id: str,
+    ) -> None:
+        """Wait for a provider response outside the browser request lifetime."""
+
+        state = self.harness.state_for(conversation_id)
         try:
-            reply = await self.harness.ask(conversation_id, clean_prompt)
+            reply = await self.harness.ask(conversation_id, prompt)
         except Exception as exc:
             await self.events.record(
                 "message.failed",
@@ -154,9 +192,13 @@ class LocalControlPlane:
                 agent_id=state.active_agent_id,
                 session_name=state.session_name,
                 summary=str(exc),
-                data={"prompt": clean_prompt, "error_type": type(exc).__name__},
+                data={
+                    "prompt": prompt,
+                    "submitted_event_id": submitted_event_id,
+                    "error_type": type(exc).__name__,
+                },
             )
-            raise
+            return
         self.state_store.save()
         await self.events.record(
             "message.completed",
@@ -164,13 +206,12 @@ class LocalControlPlane:
             agent_id=reply.agent_id,
             session_name=reply.session.name if reply.session else state.session_name,
             summary=reply.text[:160],
-            data={"reply": reply.text, "metadata": reply.metadata},
+            data={
+                "reply": reply.text,
+                "metadata": reply.metadata,
+                "submitted_event_id": submitted_event_id,
+            },
         )
-        return {
-            "reply": {"text": reply.text, "agent_id": reply.agent_id, "metadata": reply.metadata},
-            "session": session_payload(reply.session) if reply.session else None,
-            "state": self._state_payload(conversation_id),
-        }
 
     async def approve_plan(self, conversation_id: ConversationId, session_name: str) -> None:
         """Approve a session plan and write an explicit local audit event."""

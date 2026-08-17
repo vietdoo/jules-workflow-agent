@@ -350,7 +350,16 @@ class JulesClient:
         known_names = known_names or set()
         deadline = time.monotonic() + self._reply_timeout_seconds
         while time.monotonic() < deadline:
-            activities = await self.list_activities(session_name)
+            try:
+                activities = await self.list_activities(session_name)
+            except JulesAPIError as exc:
+                # Jules may return the new Session before its Activity collection is
+                # queryable. Treat a temporary 404 during this bounded poll as an
+                # eventual-consistency delay, not as a failed user task.
+                if exc.status != 404:
+                    raise
+                await asyncio.sleep(self._poll_interval_seconds)
+                continue
             for activity in activities:
                 activity_name = activity.get("name")
                 if activity_name in known_names:

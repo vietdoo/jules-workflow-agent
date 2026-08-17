@@ -1,3 +1,4 @@
+/** Studio UI types preserve the warm local-control-room message lifecycle. */
 export type Agent = {
   agent_id: string;
   display_name: string;
@@ -59,4 +60,5 @@ export type ChatMessage = {
   text: string;
   timestamp: string;
   isPending?: boolean;
+  submissionId?: string;
 };

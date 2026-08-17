@@ -1,7 +1,8 @@
-"""Jules implementation of the provider-neutral agent adapter."""
+"""Jules adapter with durable session assignment before asynchronous activity polling."""
 
 from __future__ import annotations
 
+from collections.abc import Callable
 from typing import Any
 
 from src.api.jules_client import JulesAPIError, JulesClient, JulesSession, JulesSource
@@ -41,9 +42,16 @@ def _session_view(session: JulesSession) -> AgentSession:
 class JulesAgent:
     """Adapt the Jules REST client to the shared agent harness contract."""
 
-    def __init__(self, client: JulesClient, settings: Settings) -> None:
+    def __init__(
+        self,
+        client: JulesClient,
+        settings: Settings,
+        *,
+        state_saver: Callable[[], None] | None = None,
+    ) -> None:
         self.client = client
         self.settings = settings
+        self._state_saver = state_saver
         self._descriptor = AgentDescriptor(
             agent_id="jules",
             display_name="Jules",
@@ -69,6 +77,8 @@ class JulesAgent:
                 if exc.status != 404:
                     raise
                 state.session_name = None
+                if self._state_saver is not None:
+                    self._state_saver()
 
         source_name = state.selected_source.name if state.selected_source else self.settings.jules_source
         branch = state.selected_branch or self.settings.jules_starting_branch
@@ -81,6 +91,10 @@ class JulesAgent:
             automation_mode=self.settings.jules_automation_mode,
         )
         state.session_name = session.name
+        # Persist before awaiting activity polling: session creation is immediate
+        # but activity visibility is asynchronous, and the runner may restart.
+        if self._state_saver is not None:
+            self._state_saver()
         text = await self.client.wait_for_agent_reply(session.name)
         return AgentReply(text=text, session=_session_view(session), agent_id=self.descriptor.agent_id)
 

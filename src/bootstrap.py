@@ -1,4 +1,4 @@
-"""Application composition helpers shared by Telegram and the web control plane."""
+"""Composition root that wires durable state into provider session lifecycle events."""
 
 from __future__ import annotations
 
@@ -18,7 +18,12 @@ def build_agent_harness(settings: Settings, *, store: StateStore | None = None) 
         poll_interval_seconds=settings.jules_poll_interval_seconds,
         reply_timeout_seconds=settings.jules_reply_timeout_seconds,
     )
-    jules_agent = JulesAgent(jules_client, settings)
+    state_saver = getattr(store, "save", None) if store is not None else None
+    jules_agent = JulesAgent(
+        jules_client,
+        settings,
+        state_saver=state_saver if callable(state_saver) else None,
+    )
     try:
         registry = AgentRegistry([jules_agent], default_agent_id=settings.agent_default_id)
     except ValueError as exc:

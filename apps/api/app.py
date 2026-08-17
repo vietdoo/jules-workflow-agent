@@ -202,10 +202,10 @@ def create_app(
 
     @app.post("/api/messages")
     async def send_message(payload: PromptBody) -> dict[str, Any]:
-        """Create or continue agent work and record the full local transcript."""
+        """Queue agent work and return before the asynchronous provider reply arrives."""
 
         try:
-            return await plane().send_message(payload.conversation_id, payload.prompt)
+            return await plane().submit_message(payload.conversation_id, payload.prompt)
         except Exception as exc:
             _raise_http_error(exc)
 
