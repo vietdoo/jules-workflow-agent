@@ -15,6 +15,8 @@ DEFAULT_PORT: Final[int] = 8080
 DEFAULT_JULES_TIMEOUT_SECONDS: Final[float] = 60.0
 DEFAULT_JULES_POLL_INTERVAL_SECONDS: Final[float] = 2.0
 DEFAULT_JULES_REPLY_TIMEOUT_SECONDS: Final[float] = 120.0
+DEFAULT_WEB_API_PORT: Final[int] = 8090
+DEFAULT_LOCAL_DATA_DIR: Final[str] = "runtime"
 
 
 class ConfigurationError(RuntimeError):
@@ -40,6 +42,10 @@ class Settings:
     jules_require_plan_approval: bool
     jules_automation_mode: str | None
     agent_default_id: str
+    web_api_host: str
+    web_api_port: int
+    web_cors_origins: tuple[str, ...]
+    local_data_dir: str
 
     @property
     def use_webhook(self) -> bool:
@@ -126,4 +132,13 @@ def get_settings() -> Settings:
         jules_require_plan_approval=_boolean("JULES_REQUIRE_PLAN_APPROVAL", False),
         jules_automation_mode=os.getenv("JULES_AUTOMATION_MODE", "").strip() or None,
         agent_default_id=os.getenv("AGENT_DEFAULT_ID", "jules").strip() or "jules",
+        web_api_host=os.getenv("WEB_API_HOST", "127.0.0.1").strip() or "127.0.0.1",
+        web_api_port=_positive_int("WEB_API_PORT", DEFAULT_WEB_API_PORT),
+        web_cors_origins=tuple(
+            origin.strip()
+            for origin in os.getenv("WEB_CORS_ORIGINS", "http://localhost:3000").split(",")
+            if origin.strip()
+        ),
+        local_data_dir=os.getenv("LOCAL_DATA_DIR", DEFAULT_LOCAL_DATA_DIR).strip()
+        or DEFAULT_LOCAL_DATA_DIR,
     )

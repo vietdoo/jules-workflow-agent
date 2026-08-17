@@ -8,3 +8,7 @@ __pycache__/
 .mypy_cache/
 .coverage
 .DS_Store
+runtime/
+apps/web/node_modules/
+apps/web/.next/
+*.tsbuildinfo

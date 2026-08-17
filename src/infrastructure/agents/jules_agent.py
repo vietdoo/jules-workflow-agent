@@ -6,7 +6,7 @@ from typing import Any
 
 from src.api.jules_client import JulesAPIError, JulesClient, JulesSession, JulesSource
 from src.config import Settings
-from src.domain.agent import AgentDescriptor, AgentReply, AgentSession, AgentSource
+from src.domain.agent import AgentDescriptor, AgentReply, AgentSession, AgentSource, ConversationId
 
 
 def _source_view(source: JulesSource) -> AgentSource:
@@ -58,7 +58,7 @@ class JulesAgent:
 
         return self._descriptor
 
-    async def ask(self, chat_id: int, prompt: str, *, state: Any) -> AgentReply:
+    async def ask(self, conversation_id: ConversationId, prompt: str, *, state: Any) -> AgentReply:
         """Continue an active session or create a configured Jules session."""
 
         if state.session_name:
@@ -74,7 +74,7 @@ class JulesAgent:
         branch = state.selected_branch or self.settings.jules_starting_branch
         session = await self.client.create_session(
             prompt,
-            title=f"Telegram chat {chat_id}",
+            title=f"Workflow {conversation_id}",
             source_name=source_name,
             starting_branch=branch,
             require_plan_approval=self.settings.jules_require_plan_approval,

@@ -16,9 +16,9 @@ from telegram.ext import (
 )
 
 from src.api.jules_client import JulesClient
-from src.application.harness import AgentHarness, AgentRegistry
+from src.application.harness import AgentHarness
+from src.bootstrap import build_agent_harness
 from src.config import ConfigurationError, Settings, get_settings
-from src.infrastructure.agents.jules_agent import JulesAgent
 from src.handlers.message_handlers import (
     activities_command,
     agents_command,
@@ -53,19 +53,7 @@ async def _close_client(application: Application) -> None:
 def build_application(settings: Settings) -> Application:
     """Build and configure the Telegram application instance."""
 
-    jules_client = JulesClient(
-        api_key=settings.jules_api_key,
-        base_url=settings.jules_api_url,
-        request_timeout_seconds=settings.jules_timeout_seconds,
-        poll_interval_seconds=settings.jules_poll_interval_seconds,
-        reply_timeout_seconds=settings.jules_reply_timeout_seconds,
-    )
-    jules_agent = JulesAgent(jules_client, settings)
-    try:
-        registry = AgentRegistry([jules_agent], default_agent_id=settings.agent_default_id)
-    except ValueError as exc:
-        raise ConfigurationError(f"Invalid agent configuration: {exc}") from exc
-    harness = AgentHarness(registry)
+    harness = build_agent_harness(settings)
     application = (
         ApplicationBuilder()
         .token(settings.telegram_bot_token)
@@ -73,7 +61,6 @@ def build_application(settings: Settings) -> Application:
         .build()
     )
     application.bot_data["settings"] = settings
-    application.bot_data["jules_client"] = jules_client
     application.bot_data["agent_harness"] = harness
 
     application.add_handler(CommandHandler("start", start_command))

@@ -1,6 +1,6 @@
 """Provider-neutral domain contracts for the agent harness."""
 
-from .agent import AgentAdapter, AgentDescriptor, AgentReply, AgentSession, AgentSource
+from .agent import AgentAdapter, AgentDescriptor, AgentReply, AgentSession, AgentSource, ConversationId
 
 __all__ = [
     "AgentAdapter",
@@ -8,4 +8,5 @@ __all__ = [
     "AgentReply",
     "AgentSession",
     "AgentSource",
+    "ConversationId",
 ]

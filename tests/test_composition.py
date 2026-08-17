@@ -29,6 +29,10 @@ class CompositionTests(unittest.IsolatedAsyncioTestCase):
             jules_require_plan_approval=False,
             jules_automation_mode=None,
             agent_default_id="jules",
+            web_api_host="127.0.0.1",
+            web_api_port=8090,
+            web_cors_origins=("http://127.0.0.1:3000",),
+            local_data_dir="runtime",
         )
         application = build_application(settings)
 

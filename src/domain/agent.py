@@ -3,7 +3,10 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Any, Protocol
+from typing import Any, Protocol, TypeAlias
+
+
+ConversationId: TypeAlias = int | str
 
 
 @dataclass(frozen=True, slots=True)
@@ -62,7 +65,7 @@ class AgentAdapter(Protocol):
         """Return stable metadata for this provider."""
         ...
 
-    async def ask(self, chat_id: int, prompt: str, *, state: Any) -> AgentReply:
+    async def ask(self, conversation_id: ConversationId, prompt: str, *, state: Any) -> AgentReply:
         """Create or continue work for one chat and return a normalized reply."""
         ...
 
