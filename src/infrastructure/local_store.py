@@ -235,9 +235,23 @@ class LocalEventStore:
         """Return lightweight counts for the local dashboard."""
 
         events = await self.recent(limit=10_000)
+        messages = 0
+        failures = 0
+        sessions = set()
+
+        for event in events:
+            evt_type = event.get("type", "")
+            if evt_type == "message.completed":
+                messages += 1
+            if evt_type.endswith("failed"):
+                failures += 1
+            session_name = event.get("session_name")
+            if session_name:
+                sessions.add(session_name)
+
         return {
             "events": len(events),
-            "messages": sum(event.get("type") == "message.completed" for event in events),
-            "failures": sum(event.get("type", "").endswith("failed") for event in events),
-            "sessions": len({event.get("session_name") for event in events if event.get("session_name")}),
+            "messages": messages,
+            "failures": failures,
+            "sessions": len(sessions),
         }
