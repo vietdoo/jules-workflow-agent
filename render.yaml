@@ -27,6 +27,8 @@ services:
         value: "false"
       - key: JULES_AUTOMATION_MODE
         sync: false
+      - key: AGENT_DEFAULT_ID
+        value: jules
       - key: JULES_TIMEOUT_SECONDS
         value: "60"
       - key: JULES_POLL_INTERVAL_SECONDS

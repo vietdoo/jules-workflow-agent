@@ -26,14 +26,15 @@ The bot covers the documented REST capabilities that are appropriate for a Teleg
 
 ## User interface
 
-`/start` opens the main agent card with inline buttons for a new session, live status, repositories, activities, all sessions, and help. Selecting a repository presents its available branches. Session cards display the state, title, identifier, source, branch, and native Jules URL where available. Long agent replies are split at Telegram's message limit, and callback errors are acknowledged without exposing API keys or raw credentials.
+`/start` opens the main agent card with a consistent workspace layout: active agent, selected repository, conversation status, and inline controls for new tasks, live status, repositories, activities, sessions, and help. `/agents` or the **Agents** button opens the provider picker. Selecting a repository presents its available branches. Session cards display state, title, identifier, source, branch, and native provider URL where available. Long agent replies are split at Telegram's message limit, no-op edits are ignored, and callback errors are acknowledged without exposing API keys or raw credentials.
 
 The available commands are:
 
 | Command | Purpose |
 | --- | --- |
 | `/start` | Open the main Jules Workflow Agent menu. |
-| `/help` | Display usage and API limitation guidance. |
+| `/help` | Display usage, architecture, and API limitation guidance. |
+| `/agents` | List registered agents and choose the active provider. |
 | `/sources` | List connected repositories and select a source and branch. |
 | `/session` | Display the active session's current metadata and controls. |
 | `/activities` | Render the recent Jules activity timeline, including plans and artifacts. |
@@ -47,13 +48,20 @@ jules-workflow-agent/
 ├── src/
 │   ├── __init__.py
 │   ├── config.py
+│   ├── domain/
+│   │   └── agent.py                 # Provider-neutral agent contract
+│   ├── application/
+│   │   └── harness.py               # Registry, routing, state, and use cases
+│   ├── infrastructure/
+│   │   └── agents/jules_agent.py    # Jules adapter implementation
 │   ├── api/
-│   │   ├── __init__.py
-│   │   └── jules_client.py
+│   │   └── jules_client.py          # Async Jules REST client
 │   ├── handlers/
-│   │   ├── __init__.py
-│   │   └── message_handlers.py
-│   └── main.py
+│   │   └── message_handlers.py      # Telegram presentation adapter
+│   └── main.py                       # Composition root and lifecycle
+├── tests/
+│   └── test_harness.py
+├── ARCHITECTURE.md
 ├── .env.example
 ├── .gitignore
 ├── jules_api_audit_notes.md
@@ -65,10 +73,15 @@ jules-workflow-agent/
 
 | Module | Responsibility |
 | --- | --- |
+| `src/domain/agent.py` | Defines the provider-neutral adapter contract, normalized agent descriptors, and reply envelopes. |
+| `src/application/harness.py` | Owns agent registration, chat routing, per-chat state boundaries, serialized requests, and provider-neutral use cases. |
+| `src/infrastructure/agents/jules_agent.py` | Adapts Jules-specific REST operations to the shared agent contract. New providers should implement the same adapter interface here. |
 | `src/config.py` | Loads `.env`, validates required values, parses positive numeric settings and booleans, and exposes immutable runtime configuration. |
 | `src/api/jules_client.py` | Implements authenticated async HTTP calls, pagination, source parsing, session lifecycle, plan approval, activity retrieval, artifact-aware polling, and typed errors. |
-| `src/handlers/message_handlers.py` | Implements commands, message forwarding, per-chat state, inline keyboards, callback routing, session cards, source/branch selection, activity timelines, and safe error presentation. |
-| `src/main.py` | Builds the Telegram application, registers command/callback handlers, and selects polling or webhook mode. |
+| `src/handlers/message_handlers.py` | Implements the Telegram presentation adapter: commands, inline keyboards, agent picker, session cards, source/branch selection, activity timelines, and safe error presentation. |
+| `src/main.py` | Acts as the composition root, registers adapters and handlers, and selects polling or webhook mode. |
+| `tests/test_harness.py` | Runs dependency-free unit tests for registry routing, agent switching, session boundaries, and request serialization. |
+| `ARCHITECTURE.md` | Defines the extension contract and scale path for additional agents and durable state. |
 | `render.yaml` | Defines Render deployment settings and secret environment variables. |
 
 ## Prerequisites
@@ -96,6 +109,7 @@ The two required values are `TELEGRAM_BOT_TOKEN` and `JULES_API_KEY`.
 | `JULES_STARTING_BRANCH` | No | Default branch for new sessions; defaults to `main`. The UI can override it. |
 | `JULES_REQUIRE_PLAN_APPROVAL` | No | When `true`, the bot exposes a confirmation-protected plan approval action. Defaults to `false`. |
 | `JULES_AUTOMATION_MODE` | No | Optional Jules automation value, such as `AUTO_CREATE_PR`. |
+| `AGENT_DEFAULT_ID` | No | Agent selected for new chats; defaults to `jules`. The ID must be registered in the composition root. |
 | `WEBHOOK_URL` | No | Public HTTPS base URL. When set, the bot uses `/telegram/webhook`; when blank, it uses long polling. |
 | `PORT` | No | Listening port; defaults to `8080` and is normally supplied by Render. |
 | `WEBHOOK_SECRET_TOKEN` | No | Telegram webhook secret token. |
@@ -116,7 +130,11 @@ python -m pip install -r requirements.txt
 python -m src.main
 ```
 
-Leave `WEBHOOK_URL` blank for local long polling. The Telegram application and Jules HTTP client close during application shutdown.
+Leave `WEBHOOK_URL` blank for local long polling. The Telegram application and all registered agent adapters close during application shutdown. Run the local architecture tests with:
+
+```bash
+python -m unittest discover -s tests -v
+```
 
 ## Render deployment
 
@@ -139,7 +157,9 @@ A Render Background Worker can use the same commands with `WEBHOOK_URL` empty, w
 
 ## Jules request lifecycle
 
-For a new chat task, the handler selects the chat's repository and branch if configured, calls `POST /sessions`, stores the returned session resource name, and polls activities until a new agent message or failure is observed. Follow-up messages record known activity names, call `:sendMessage`, and poll only for new activity. Status and activity buttons always retrieve fresh data from Jules rather than relying only on cached UI text.
+For a new chat task, Telegram delegates to the application harness rather than calling Jules directly. The harness selects the active adapter, serializes requests per chat, stores provider-neutral conversation state, and delegates the prompt to the adapter. The Jules adapter selects the chat's repository and branch if configured, calls `POST /sessions`, stores the returned session resource name, and polls activities until a new agent message or failure is observed. Follow-up messages call `:sendMessage` and poll only for new activity. Status and activity buttons retrieve fresh provider data rather than relying only on cached UI text.
+
+Adding another agent should require a new adapter implementing the contract in `src/domain/agent.py`, registration in `src/main.py`, and provider-specific tests. Telegram commands, callback routing, state locking, and the active-agent UI remain unchanged.
 
 ```text
 Telegram task
@@ -155,14 +175,15 @@ Bot UI ── create session / send message ──► Jules REST API
   └── delete session after confirmation
 ```
 
-The current process stores chat-to-session associations and UI selections in memory. A restart clears only those local associations; remote Jules sessions remain available through `/sessions`. For multiple replicas or durable ownership, replace `ChatSessionStore` with a shared database or key-value store.
+The current process stores chat-to-agent associations, session links, and UI selections in memory behind the `ChatStateStore` port. A restart clears only those local associations; remote sessions remain available through the provider's session list. For multiple replicas or durable ownership, implement the same store contract with Redis or a database, then inject it into `AgentHarness`; no Telegram handler changes are required.
 
 ## Validation
 
 Compile all Python modules without making network calls:
 
 ```bash
-python -m compileall -q src
+python -m compileall -q src tests
+python -m unittest discover -s tests -v
 ```
 
 The configuration loader fails fast when required credentials are missing or numeric and boolean settings are invalid. The API client converts unsuccessful HTTP responses, transport failures, timeouts, and malformed JSON into typed exceptions. The Telegram layer returns concise user-safe messages while keeping operational details in logs.
@@ -171,7 +192,7 @@ The configuration loader fails fast when required credentials are missing or num
 
 Never commit `.env`, Jules API keys, or Telegram tokens. Store production credentials in Render's encrypted environment settings. Do not place the Jules API key in a Telegram message, callback payload, URL, or client-side application.
 
-The bot can expose the Jules REST API's documented sessions, activities, sources, plan approval, session deletion, and automation fields. It cannot reproduce features that are not exposed by the REST API, including connecting a new GitHub repository through the bot. Users can use the `Open in Jules` button to access the native Jules website for web-only operations.
+The bot can expose the Jules REST API's documented sessions, activities, sources, plan approval, session deletion, and automation fields through the Jules adapter. It cannot reproduce features that are not exposed by the REST API, including connecting a new GitHub repository through the bot. Users can use the provider URL button to access the native Jules website for web-only operations. The in-memory state store is intentionally single-process; use a shared implementation before running multiple replicas.
 
 ## Troubleshooting
 

@@ -16,9 +16,12 @@ from telegram.ext import (
 )
 
 from src.api.jules_client import JulesClient
+from src.application.harness import AgentHarness, AgentRegistry
 from src.config import ConfigurationError, Settings, get_settings
+from src.infrastructure.agents.jules_agent import JulesAgent
 from src.handlers.message_handlers import (
     activities_command,
+    agents_command,
     callback_handler,
     error_handler,
     help_command,
@@ -36,8 +39,12 @@ WEBHOOK_PATH = "/telegram/webhook"
 
 
 async def _close_client(application: Application) -> None:
-    """Close the external API client during Telegram application shutdown."""
+    """Close all registered agent adapters during application shutdown."""
 
+    harness = application.bot_data.get("agent_harness")
+    if isinstance(harness, AgentHarness):
+        await harness.close()
+        return
     client = application.bot_data.get("jules_client")
     if isinstance(client, JulesClient):
         await client.close()
@@ -53,6 +60,12 @@ def build_application(settings: Settings) -> Application:
         poll_interval_seconds=settings.jules_poll_interval_seconds,
         reply_timeout_seconds=settings.jules_reply_timeout_seconds,
     )
+    jules_agent = JulesAgent(jules_client, settings)
+    try:
+        registry = AgentRegistry([jules_agent], default_agent_id=settings.agent_default_id)
+    except ValueError as exc:
+        raise ConfigurationError(f"Invalid agent configuration: {exc}") from exc
+    harness = AgentHarness(registry)
     application = (
         ApplicationBuilder()
         .token(settings.telegram_bot_token)
@@ -61,9 +74,11 @@ def build_application(settings: Settings) -> Application:
     )
     application.bot_data["settings"] = settings
     application.bot_data["jules_client"] = jules_client
+    application.bot_data["agent_harness"] = harness
 
     application.add_handler(CommandHandler("start", start_command))
     application.add_handler(CommandHandler("help", help_command))
+    application.add_handler(CommandHandler("agents", agents_command))
     application.add_handler(CommandHandler("sources", sources_command))
     application.add_handler(CommandHandler("session", session_command))
     application.add_handler(CommandHandler("activities", activities_command))
@@ -125,7 +140,11 @@ def main() -> None:
         level=getattr(logging, settings.log_level, logging.INFO),
         format="%(asctime)s | %(levelname)s | %(name)s | %(message)s",
     )
-    run(settings)
+    try:
+        run(settings)
+    except ConfigurationError as exc:
+        LOGGER.error("Configuration error: %s", exc)
+        sys.exit(1)
 
 
 if __name__ == "__main__":

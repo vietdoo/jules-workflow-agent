@@ -39,6 +39,7 @@ class Settings:
     jules_starting_branch: str
     jules_require_plan_approval: bool
     jules_automation_mode: str | None
+    agent_default_id: str
 
     @property
     def use_webhook(self) -> bool:
@@ -124,4 +125,5 @@ def get_settings() -> Settings:
         jules_starting_branch=os.getenv("JULES_STARTING_BRANCH", "main").strip() or "main",
         jules_require_plan_approval=_boolean("JULES_REQUIRE_PLAN_APPROVAL", False),
         jules_automation_mode=os.getenv("JULES_AUTOMATION_MODE", "").strip() or None,
+        agent_default_id=os.getenv("AGENT_DEFAULT_ID", "jules").strip() or "jules",
     )
