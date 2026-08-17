@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import asyncio
+import time
 from dataclasses import asdict
 from typing import Any
 
@@ -42,6 +43,24 @@ class LocalControlPlane:
         self.state_store = state_store
         self.events = events
         self._inflight: dict[str, asyncio.Task[None]] = {}
+        self._progress_monitors: dict[str, asyncio.Task[None]] = {}
+
+    async def _events_for_conversation(self, conversation_id: ConversationId, *, limit: int = 100) -> list[dict[str, Any]]:
+        """Return only the durable audit events belonging to one Studio workspace."""
+
+        records = await self.events.recent(limit=max(limit * 10, 500))
+        return [event for event in records if event.get("conversation_id") == str(conversation_id)][:limit]
+
+    @staticmethod
+    def _event_summary(records: list[dict[str, Any]]) -> dict[str, int]:
+        """Derive dashboard counts from one workspace instead of the global event journal."""
+
+        return {
+            "events": len(records),
+            "messages": sum(event.get("type") == "message.completed" for event in records),
+            "failures": sum(str(event.get("type", "")).endswith("failed") for event in records),
+            "sessions": len({event.get("session_name") for event in records if event.get("session_name")}),
+        }
 
     def _state_payload(self, conversation_id: ConversationId) -> dict[str, Any]:
         state = self.harness.state_for(conversation_id)
@@ -56,12 +75,15 @@ class LocalControlPlane:
     async def dashboard(self, conversation_id: ConversationId) -> dict[str, Any]:
         """Return a compact local overview for the dashboard view."""
 
-        event_summary = await self.events.summary()
+        state = self.harness.state_for(conversation_id)
+        if state.session_name:
+            self._ensure_progress_monitor(conversation_id, state.session_name, submitted_event_id="")
+        recent_events = await self._events_for_conversation(conversation_id, limit=100)
         return {
             "state": self._state_payload(conversation_id),
             "agents": [descriptor_payload(item) for item in self.harness.registry.descriptors()],
-            "event_summary": event_summary,
-            "recent_events": await self.events.recent(limit=12),
+            "event_summary": self._event_summary(recent_events),
+            "recent_events": recent_events[:12],
         }
 
     async def agents(self, conversation_id: ConversationId) -> dict[str, Any]:
@@ -132,6 +154,23 @@ class LocalControlPlane:
 
         return await self.harness.list_activities(conversation_id, session_name)
 
+    async def attach_session(self, conversation_id: ConversationId, session_name: str) -> dict[str, Any]:
+        """Attach an existing remote session so later prompts continue that work."""
+
+        session = await self.harness.get_session(conversation_id, session_name)
+        state = self.harness.state_for(conversation_id)
+        state.session_name = session.name
+        self.state_store.save()
+        await self.events.record(
+            "session.attached",
+            conversation_id=conversation_id,
+            agent_id=state.active_agent_id,
+            session_name=session.name,
+            summary=f"Attached {session.title or session.identifier}",
+        )
+        self._ensure_progress_monitor(conversation_id, session.name, submitted_event_id="")
+        return self._state_payload(conversation_id)
+
     async def submit_message(self, conversation_id: ConversationId, prompt: str) -> dict[str, Any]:
         """Accept one Studio task and record its eventual provider result in the journal."""
 
@@ -183,8 +222,13 @@ class LocalControlPlane:
         """Wait for a provider response outside the browser request lifetime."""
 
         state = self.harness.state_for(conversation_id)
+        ask_task = asyncio.create_task(
+            self.harness.ask(conversation_id, prompt),
+            name=f"provider-reply:{conversation_id}",
+        )
+        await self._start_progress_monitor(conversation_id, ask_task, submitted_event_id)
         try:
-            reply = await self.harness.ask(conversation_id, prompt)
+            reply = await ask_task
         except Exception as exc:
             await self.events.record(
                 "message.failed",
@@ -200,6 +244,23 @@ class LocalControlPlane:
             )
             return
         self.state_store.save()
+        if reply.metadata.get("pending"):
+            await self.events.record(
+                "message.progress",
+                conversation_id=conversation_id,
+                agent_id=reply.agent_id,
+                session_name=(reply.session.name if reply.session else state.session_name),
+                summary=reply.text,
+                data={"submitted_event_id": submitted_event_id, "metadata": reply.metadata},
+            )
+            return
+        existing_events = await self._events_for_conversation(conversation_id, limit=200)
+        if any(
+            event.get("type") == "message.completed"
+            and str(event.get("data", {}).get("submitted_event_id") or "") == submitted_event_id
+            for event in existing_events
+        ):
+            return
         await self.events.record(
             "message.completed",
             conversation_id=conversation_id,
@@ -212,6 +273,110 @@ class LocalControlPlane:
                 "submitted_event_id": submitted_event_id,
             },
         )
+
+    async def _start_progress_monitor(
+        self,
+        conversation_id: ConversationId,
+        ask_task: asyncio.Task[AgentReply],
+        submitted_event_id: str,
+    ) -> None:
+        """Wait for the provider session assignment, then stream durable progress events."""
+
+        state = self.harness.state_for(conversation_id)
+        for _ in range(40):
+            if state.session_name:
+                self._ensure_progress_monitor(conversation_id, state.session_name, submitted_event_id)
+                return
+            if ask_task.done():
+                return
+            await asyncio.sleep(0.25)
+
+    def _ensure_progress_monitor(
+        self,
+        conversation_id: ConversationId,
+        session_name: str,
+        submitted_event_id: str,
+    ) -> None:
+        """Start one durable provider monitor for an active or attached session."""
+
+        if session_name in self._progress_monitors:
+            return
+        monitor = asyncio.create_task(
+            self._monitor_provider_session(conversation_id, session_name, submitted_event_id),
+            name=f"provider-progress:{session_name}",
+        )
+        self._progress_monitors[session_name] = monitor
+        monitor.add_done_callback(lambda finished, key=session_name: self._progress_monitors.pop(key, None))
+
+    async def _monitor_provider_session(
+        self,
+        conversation_id: ConversationId,
+        session_name: str,
+        submitted_event_id: str,
+    ) -> None:
+        """Mirror Jules plans, updates, artifacts, and terminal state into the local journal."""
+
+        known_activity_names: set[str] = set()
+        known_session_state = ""
+        deadline = time.monotonic() + 1800
+        while time.monotonic() < deadline:
+            try:
+                activities = await self.harness.list_activities(conversation_id, session_name)
+                for activity in activities:
+                    activity_name = str(activity.get("name") or "")
+                    if activity_name and activity_name in known_activity_names:
+                        continue
+                    if activity_name:
+                        known_activity_names.add(activity_name)
+                    kind = str(activity.get("kind") or "activity.observed")
+                    event_type = f"provider.{kind}"
+                    data: dict[str, Any] = {"submitted_event_id": submitted_event_id, "activity": activity}
+                    if kind == "agent.message":
+                        event_type = "message.completed"
+                        data["reply"] = str(activity.get("summary") or "Jules sent a message.")
+                    await self.events.record(
+                        event_type,
+                        conversation_id=conversation_id,
+                        agent_id=self.harness.state_for(conversation_id).active_agent_id,
+                        session_name=session_name,
+                        summary=str(activity.get("summary") or "Jules reported work progress."),
+                        data=data,
+                    )
+                    if bool(activity.get("terminal")):
+                        return
+                session = await self.harness.get_session(conversation_id, session_name)
+                state_value = (session.state or "").upper()
+                if state_value and state_value != known_session_state:
+                    known_session_state = state_value
+                    await self.events.record(
+                        "session.state_changed",
+                        conversation_id=conversation_id,
+                        agent_id=self.harness.state_for(conversation_id).active_agent_id,
+                        session_name=session_name,
+                        summary=session.state_label,
+                        data={"submitted_event_id": submitted_event_id, "state": session.state},
+                    )
+                if any(marker in state_value for marker in ("COMPLETED", "SUCCEEDED", "FAILED", "CANCELLED")):
+                    event_type = "session.failed" if any(marker in state_value for marker in ("FAILED", "CANCELLED")) else "session.completed"
+                    await self.events.record(
+                        event_type,
+                        conversation_id=conversation_id,
+                        agent_id=self.harness.state_for(conversation_id).active_agent_id,
+                        session_name=session_name,
+                        summary=f"Jules session {session.state_label}.",
+                        data={"submitted_event_id": submitted_event_id, "state": session.state, "url": session.url},
+                    )
+                    return
+            except Exception as exc:
+                await self.events.record(
+                    "provider.sync_attention",
+                    conversation_id=conversation_id,
+                    agent_id=self.harness.state_for(conversation_id).active_agent_id,
+                    session_name=session_name,
+                    summary=f"Waiting to resynchronize Jules progress: {exc}",
+                    data={"submitted_event_id": submitted_event_id},
+                )
+            await asyncio.sleep(3)
 
     async def approve_plan(self, conversation_id: ConversationId, session_name: str) -> None:
         """Approve a session plan and write an explicit local audit event."""
@@ -251,3 +416,8 @@ class LocalControlPlane:
             summary="Cleared local active session",
         )
         return self._state_payload(conversation_id)
+
+    async def recent_events(self, conversation_id: ConversationId, *, limit: int = 100) -> list[dict[str, Any]]:
+        """Expose the scoped local journal to browser views and WebSocket streams."""
+
+        return await self._events_for_conversation(conversation_id, limit=limit)

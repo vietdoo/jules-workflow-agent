@@ -25,3 +25,11 @@ The prior Studio failure was traced to two lifecycle issues: Jules can expose a 
 An explicitly non-modifying Jules task — “Reply with exactly READY. Do not create, edit, delete, or modify any files.” — was submitted against `vietdoo/jules-workflow-agent`. The endpoint returned acceptance immediately at 06:55:00 UTC, persisted session `sessions/12731672509830353459` by 06:55:09 UTC, and recorded the `READY` agent response at 06:55:24 UTC. The public Studio rendered the submitted prompt and its corresponding Jules reply.
 
 The current Studio event feed remains global to the local harness, so it also shows events from other local conversations. This does not prevent prompt completion, but conversation-scoped event filtering should be addressed in a separate follow-up if multiple concurrent workspaces are expected.
+
+## 2026-08-17: Provider progress and control audit
+
+The active `web:local` Jules session `sessions/10960687808801051623` was re-synchronized after its earlier text-only timeout. The Studio now records and displays the provider's seven-step implementation plan, approval event, structured progress messages for `BooksCard.astro`, and active session state. The absence of an immediate final text message is no longer treated as proof that Jules did no work.
+
+The public Studio review confirmed functional Workspace, Sessions, Activity, Local journals, refresh/sync, repository and branch selection, session attachment, agent selection, and `Open in Jules` controls. Agent/source/session/reset actions were exercised non-destructively in an isolated `web:control-audit` conversation. Plan approval remains an explicit user-facing action and was not auto-invoked during verification.
+
+The Activity, Local journals, Harness logs, Settings, Sessions, and agent-picker views were each opened successfully in the public Studio. Harness logs intentionally expose only safe operational status; credential values, raw process logs, and other host-only diagnostics remain unavailable to the exposed browser interface.

@@ -7,6 +7,7 @@ import time
 import unittest
 from pathlib import Path
 from typing import Any
+from urllib.parse import quote
 
 from fastapi.testclient import TestClient
 
@@ -32,7 +33,7 @@ class FakeAgent:
     async def ask(self, conversation_id: str | int, prompt: str, *, state: Any) -> AgentReply:
         state.session_name = "sessions/fake-session"
         return AgentReply(
-            text=f"Echo: {prompt}",
+            text="Jules accepted this task and is reporting provider activity.",
             agent_id="fake",
             session=AgentSession(
                 name="sessions/fake-session",
@@ -41,6 +42,7 @@ class FakeAgent:
                 state="IN_PROGRESS",
                 state_label="In Progress",
             ),
+            metadata={"pending": True},
         )
 
     async def list_sources(self) -> list[AgentSource]:
@@ -63,7 +65,19 @@ class FakeAgent:
         )
 
     async def list_activities(self, session_name: str) -> list[dict[str, Any]]:
-        return [{"name": f"{session_name}/activities/1", "agentMessaged": {"agentMessage": "ok"}}]
+        return [
+            {
+                "name": f"{session_name}/activities/plan",
+                "kind": "plan.proposed",
+                "summary": "Jules prepared an implementation plan.",
+            },
+            {
+                "name": f"{session_name}/activities/message",
+                "kind": "agent.message",
+                "summary": "Provider completed work.",
+                "terminal": True,
+            },
+        ]
 
     async def list_sessions(self) -> list[AgentSession]:
         return [await self.get_session("sessions/fake-session")]
@@ -108,7 +122,7 @@ class ControlPlaneApiTests(unittest.TestCase):
     """Verify browser-facing API shapes and local transcript recording."""
 
     def test_dashboard_context_prompt_and_journal_workflow(self) -> None:
-        """The browser receives an acceptance before its journal records the agent reply."""
+        """The browser receives immediate acceptance and later mirrors provider activity."""
 
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
@@ -135,14 +149,35 @@ class ControlPlaneApiTests(unittest.TestCase):
                 self.assertTrue(reply.json()["submission_id"])
 
                 events: list[dict[str, Any]] = []
-                for _ in range(20):
-                    events = client.get("/api/events").json()
+                for _ in range(100):
+                    events = client.get("/api/events?conversation_id=web:local").json()
                     if any(item["type"] == "message.completed" for item in events):
                         break
                     time.sleep(0.01)
-                self.assertEqual([item["type"] for item in events[:2]], ["message.completed", "message.submitted"])
-                self.assertEqual(events[0]["data"]["reply"], "Echo: Summarize the change.")
-                self.assertEqual(events[0]["data"]["submitted_event_id"], reply.json()["submission_id"])
+                event_types = [item["type"] for item in events]
+                self.assertIn("provider.plan.proposed", event_types)
+                self.assertIn("message.completed", event_types)
+                completion = next(item for item in events if item["type"] == "message.completed")
+                self.assertEqual(completion["data"]["reply"], "Provider completed work.")
+                self.assertEqual(completion["data"]["submitted_event_id"], reply.json()["submission_id"])
+                self.assertNotIn("message.failed", event_types)
+
+                encoded_session = quote("sessions/fake-session", safe="")
+                activities = client.get(f"/api/sessions/{encoded_session}/activities?conversation_id=web:local")
+                self.assertEqual(activities.status_code, 200)
+                self.assertEqual(activities.json()[0]["kind"], "plan.proposed")
+
+                reset = client.post("/api/sessions/reset", json={"conversation_id": "web:local"})
+                self.assertEqual(reset.status_code, 200)
+                attached = client.post(
+                    f"/api/sessions/{encoded_session}/attach",
+                    json={"conversation_id": "web:local"},
+                )
+                self.assertEqual(attached.status_code, 200)
+                self.assertEqual(attached.json()["session_name"], "sessions/fake-session")
+
+                other_events = client.get("/api/events?conversation_id=web:other").json()
+                self.assertEqual(other_events, [])
 
 
 if __name__ == "__main__":

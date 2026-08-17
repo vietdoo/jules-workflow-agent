@@ -28,6 +28,18 @@ class JulesAPIError(JulesClientError):
         self.message = message
 
 
+class JulesReplyPending(JulesClientError):
+    """Signal that a valid Jules session is still working after the reply window."""
+
+    def __init__(self, session_name: str, timeout_seconds: float) -> None:
+        super().__init__(
+            "Jules is still working and has not emitted an agent-authored text message "
+            f"within {timeout_seconds:.0f} seconds."
+        )
+        self.session_name = session_name
+        self.timeout_seconds = timeout_seconds
+
+
 @dataclass(frozen=True, slots=True)
 class JulesSource:
     """Connected GitHub repository exposed by the Jules Sources API."""
@@ -370,10 +382,7 @@ class JulesClient:
                     return reply
             await asyncio.sleep(self._poll_interval_seconds)
 
-        raise JulesClientError(
-            "Jules accepted the request but did not produce a text response "
-            f"within {self._reply_timeout_seconds:.0f} seconds."
-        )
+        raise JulesReplyPending(session_name, self._reply_timeout_seconds)
 
     @staticmethod
     def _parse_source(response: Mapping[str, Any]) -> JulesSource:
@@ -479,3 +488,126 @@ class JulesClient:
             if isinstance(reason, str) and reason.strip():
                 return reason.strip()
         return None
+
+    @classmethod
+    def describe_activity(cls, activity: Mapping[str, Any]) -> dict[str, Any]:
+        """Return a compact, browser-safe description of a Jules activity payload."""
+
+        activity_name = activity.get("name") if isinstance(activity.get("name"), str) else ""
+        if (failure := cls._extract_failure(activity)):
+            return {
+                "name": activity_name,
+                "kind": "session.failed",
+                "summary": failure,
+                "terminal": True,
+                "raw": dict(activity),
+            }
+        if (agent_text := cls._extract_agent_text(activity)):
+            return {
+                "name": activity_name,
+                "kind": "agent.message",
+                "summary": agent_text,
+                "terminal": False,
+                "raw": dict(activity),
+            }
+
+        plan_generated = activity.get("planGenerated")
+        if isinstance(plan_generated, Mapping):
+            plan = plan_generated.get("plan")
+            steps = plan.get("steps") if isinstance(plan, Mapping) else None
+            count = len(steps) if isinstance(steps, list) else 0
+            return {
+                "name": activity_name,
+                "kind": "plan.generated",
+                "summary": f"Jules generated a {count}-step implementation plan." if count else "Jules generated an implementation plan.",
+                "terminal": False,
+                "raw": dict(activity),
+            }
+
+        progress_updated = activity.get("progressUpdated")
+        if isinstance(progress_updated, Mapping):
+            return {
+                "name": activity_name,
+                "kind": "progress.updated",
+                "summary": cls._activity_summary(progress_updated, "Jules reported work progress."),
+                "terminal": False,
+                "raw": dict(activity),
+            }
+
+        change_set = activity.get("changeSet")
+        if isinstance(change_set, Mapping):
+            return {
+                "name": activity_name,
+                "kind": "code.changed",
+                "summary": cls._change_set_summary(change_set),
+                "terminal": False,
+                "raw": dict(activity),
+            }
+
+        activity_kinds = (
+            ("planApproved", "plan.approved", "Jules approved the plan."),
+            ("sessionCompleted", "session.completed", "Jules completed the session."),
+            ("artifactCreated", "artifact.created", "Jules produced an artifact."),
+            ("codeChanged", "code.changed", "Jules updated repository files."),
+        )
+        for key, kind, fallback in activity_kinds:
+            payload = activity.get(key)
+            if isinstance(payload, Mapping) or isinstance(payload, list) or payload is True:
+                return {
+                    "name": activity_name,
+                    "kind": kind,
+                    "summary": cls._activity_summary(payload, fallback),
+                    "terminal": kind == "session.completed",
+                    "raw": dict(activity),
+                }
+
+        return {
+            "name": activity_name,
+            "kind": "activity.observed",
+            "summary": cls._activity_summary(activity, "Jules reported work progress."),
+            "terminal": False,
+            "raw": dict(activity),
+        }
+
+    @staticmethod
+    def _activity_summary(value: Any, fallback: str) -> str:
+        """Extract a short human-readable signal from a nested provider activity."""
+
+        preferred_fields = ("summary", "title", "description", "message", "reason", "path", "name")
+        if isinstance(value, Mapping):
+            for field in preferred_fields:
+                candidate = value.get(field)
+                if isinstance(candidate, str) and candidate.strip():
+                    return candidate.strip()[:500]
+            for candidate in value.values():
+                summary = JulesClient._activity_summary(candidate, "")
+                if summary:
+                    return summary
+        elif isinstance(value, list):
+            for candidate in value:
+                summary = JulesClient._activity_summary(candidate, "")
+                if summary:
+                    return summary
+        elif isinstance(value, str) and value.strip():
+            return value.strip()[:500]
+        return fallback
+
+    @staticmethod
+    def _change_set_summary(change_set: Mapping[str, Any]) -> str:
+        """Return a concise file-oriented summary without exposing full provider diffs."""
+
+        patch = change_set.get("gitPatch")
+        patch = patch if isinstance(patch, Mapping) else change_set
+        diff = patch.get("unidiffPatch") if isinstance(patch, Mapping) else None
+        if isinstance(diff, str):
+            changed_files = [
+                line.removeprefix("+++ b/")
+                for line in diff.splitlines()
+                if line.startswith("+++ b/")
+            ]
+            unique_files = list(dict.fromkeys(changed_files))
+            if unique_files:
+                preview = ", ".join(unique_files[:3])
+                suffix = "" if len(unique_files) <= 3 else f", and {len(unique_files) - 3} more"
+                return f"Jules updated {preview}{suffix}."
+        return "Jules updated repository files."

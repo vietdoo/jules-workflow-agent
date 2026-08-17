@@ -47,7 +47,8 @@ export const controlApi = {
     request<Record<string, unknown>[]>(
       `/api/sessions/${encodeURIComponent(sessionName)}/activities?conversation_id=${encodeURIComponent(conversationId)}`,
     ),
-  events: () => request<EventRecord[]>("/api/events?limit=100"),
+  events: (conversationId: string) =>
+    request<EventRecord[]>(`/api/events?conversation_id=${encodeURIComponent(conversationId)}&limit=100`),
   resetSession: (conversationId: string) =>
     request<WorkspaceState>("/api/sessions/reset", { method: "POST", body: { conversation_id: conversationId } }),
   sendMessage: (conversationId: string, prompt: string) =>
@@ -60,9 +61,14 @@ export const controlApi = {
       method: "POST",
       body: { conversation_id: conversationId, confirm: true },
     }),
+  attachSession: (conversationId: string, sessionName: string) =>
+    request<WorkspaceState>(`/api/sessions/${encodeURIComponent(sessionName)}/attach`, {
+      method: "POST",
+      body: { conversation_id: conversationId },
+    }),
 };
 
-export function eventsWebSocketUrl(): string {
+export function eventsWebSocketUrl(conversationId: string): string {
   const scheme = window.location.protocol === "https:" ? "wss" : "ws";
-  return `${scheme}://${window.location.host}/api/events/stream`;
+  return `${scheme}://${window.location.host}/api/events/stream?conversation_id=${encodeURIComponent(conversationId)}`;
 }

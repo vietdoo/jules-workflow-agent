@@ -180,16 +180,7 @@ def create_app(
         except Exception as exc:
             _raise_http_error(exc)
 
-    @app.get("/api/sessions/{session_name}")
-    async def session(session_name: str, conversation_id: ConversationQuery = DEFAULT_CONVERSATION_ID) -> dict[str, Any]:
-        """Return normalized metadata for a single provider session."""
-
-        try:
-            return await plane().session(conversation_id, session_name)
-        except Exception as exc:
-            _raise_http_error(exc)
-
-    @app.get("/api/sessions/{session_name}/activities")
+    @app.get("/api/sessions/{session_name:path}/activities")
     async def activities(
         session_name: str, conversation_id: ConversationQuery = DEFAULT_CONVERSATION_ID
     ) -> list[dict[str, Any]]:
@@ -197,6 +188,15 @@ def create_app(
 
         try:
             return await plane().activities(conversation_id, session_name)
+        except Exception as exc:
+            _raise_http_error(exc)
+
+    @app.get("/api/sessions/{session_name:path}")
+    async def session(session_name: str, conversation_id: ConversationQuery = DEFAULT_CONVERSATION_ID) -> dict[str, Any]:
+        """Return normalized metadata for a single provider session."""
+
+        try:
+            return await plane().session(conversation_id, session_name)
         except Exception as exc:
             _raise_http_error(exc)
 
@@ -209,7 +209,16 @@ def create_app(
         except Exception as exc:
             _raise_http_error(exc)
 
-    @app.post("/api/sessions/{session_name}/approve")
+    @app.post("/api/sessions/{session_name:path}/attach")
+    async def attach_session(session_name: str, payload: ConversationBody) -> dict[str, Any]:
+        """Attach an existing provider session to the active Studio workspace."""
+
+        try:
+            return await plane().attach_session(payload.conversation_id, session_name)
+        except Exception as exc:
+            _raise_http_error(exc)
+
+    @app.post("/api/sessions/{session_name:path}/approve")
     async def approve_plan(session_name: str, payload: SessionActionBody) -> dict[str, bool]:
         """Approve a provider plan only after the browser sends explicit confirmation."""
 
@@ -227,7 +236,7 @@ def create_app(
 
         return await plane().reset_session(payload.conversation_id)
 
-    @app.delete("/api/sessions/{session_name}")
+    @app.delete("/api/sessions/{session_name:path}")
     async def delete_session(session_name: str, payload: SessionActionBody) -> dict[str, bool]:
         """Delete one remote session only after explicit browser confirmation."""
 
@@ -240,20 +249,23 @@ def create_app(
             _raise_http_error(exc)
 
     @app.get("/api/events")
-    async def events(limit: int = Query(default=100, ge=1, le=500)) -> list[dict[str, Any]]:
-        """Return recent local JSONL-backed audit events."""
+    async def events(
+        conversation_id: ConversationQuery = DEFAULT_CONVERSATION_ID,
+        limit: int = Query(default=100, ge=1, le=500),
+    ) -> list[dict[str, Any]]:
+        """Return recent JSONL-backed audit events for one browser workspace."""
 
-        return await plane().events.recent(limit=limit)
+        return await plane().recent_events(conversation_id, limit=limit)
 
     @app.websocket("/api/events/stream")
-    async def event_stream(websocket: WebSocket) -> None:
+    async def event_stream(websocket: WebSocket, conversation_id: str = DEFAULT_CONVERSATION_ID) -> None:
         """Poll local append-only events and publish deltas to a browser workspace."""
 
         await websocket.accept()
         last_event_id = ""
         try:
             while True:
-                recent = await plane().events.recent(limit=40)
+                recent = await plane().recent_events(conversation_id, limit=40)
                 ordered = list(reversed(recent))
                 if last_event_id:
                     new_events = [event for event in ordered if event["id"] > last_event_id]

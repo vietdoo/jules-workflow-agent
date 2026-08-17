@@ -5,7 +5,7 @@ from __future__ import annotations
 from collections.abc import Callable
 from typing import Any
 
-from src.api.jules_client import JulesAPIError, JulesClient, JulesSession, JulesSource
+from src.api.jules_client import JulesAPIError, JulesClient, JulesReplyPending, JulesSession, JulesSource
 from src.config import Settings
 from src.domain.agent import AgentDescriptor, AgentReply, AgentSession, AgentSource, ConversationId
 
@@ -73,6 +73,15 @@ class JulesAgent:
             try:
                 text = await self.client.continue_session(state.session_name, prompt)
                 return AgentReply(text=text, agent_id=self.descriptor.agent_id)
+            except JulesReplyPending as exc:
+                return AgentReply(
+                    text=(
+                        "Jules accepted this follow-up and is still working. "
+                        "The Studio will continue to show provider progress and the terminal outcome."
+                    ),
+                    agent_id=self.descriptor.agent_id,
+                    metadata={"pending": True, "session_name": exc.session_name},
+                )
             except JulesAPIError as exc:
                 if exc.status != 404:
                     raise
@@ -95,7 +104,18 @@ class JulesAgent:
         # but activity visibility is asynchronous, and the runner may restart.
         if self._state_saver is not None:
             self._state_saver()
-        text = await self.client.wait_for_agent_reply(session.name)
+        try:
+            text = await self.client.wait_for_agent_reply(session.name)
+        except JulesReplyPending:
+            return AgentReply(
+                text=(
+                    "Jules accepted this task and is continuing asynchronously. "
+                    "The Studio will stream plans, activity, and the terminal outcome as they arrive."
+                ),
+                session=_session_view(session),
+                agent_id=self.descriptor.agent_id,
+                metadata={"pending": True, "session_name": session.name},
+            )
         return AgentReply(text=text, session=_session_view(session), agent_id=self.descriptor.agent_id)
 
     async def list_sources(self) -> list[AgentSource]:
@@ -111,7 +131,10 @@ class JulesAgent:
     async def list_activities(self, session_name: str) -> list[dict[str, Any]]:
         """Retrieve all activities for a Jules session."""
 
-        return await self.client.list_activities(session_name, page_size=100)
+        return [
+            self.client.describe_activity(activity)
+            for activity in await self.client.list_activities(session_name, page_size=100)
+        ]
 
     async def list_sessions(self) -> list[AgentSession]:
         """List recent normalized Jules sessions."""
