@@ -1,6 +1,11 @@
 import type { Agent, Dashboard, EventRecord, Session, Source, WorkspaceState } from "./types";
 
-const API_BASE = process.env.NEXT_PUBLIC_API_BASE ?? "http://127.0.0.1:8090";
+/**
+ * Browser requests deliberately stay on the Studio origin. Next.js proxies `/api/*`
+ * to the local FastAPI control plane, so a remote browser never attempts to reach
+ * its own loopback address and no public API-base value is baked into the bundle.
+ */
+const API_BASE = "";
 
 type RequestOptions = Omit<RequestInit, "body"> & { body?: unknown };
 
@@ -57,5 +62,6 @@ export const controlApi = {
 };
 
 export function eventsWebSocketUrl(): string {
-  return `${API_BASE.replace(/^http/, "ws")}/api/events/stream`;
+  const scheme = window.location.protocol === "https:" ? "wss" : "ws";
+  return `${scheme}://${window.location.host}/api/events/stream`;
 }
