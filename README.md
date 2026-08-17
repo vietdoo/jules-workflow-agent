@@ -110,6 +110,10 @@ The two required values are `TELEGRAM_BOT_TOKEN` and `JULES_API_KEY`.
 | `JULES_REQUIRE_PLAN_APPROVAL` | No | When `true`, the bot exposes a confirmation-protected plan approval action. Defaults to `false`. |
 | `JULES_AUTOMATION_MODE` | No | Optional Jules automation value, such as `AUTO_CREATE_PR`. |
 | `AGENT_DEFAULT_ID` | No | Agent selected for new chats; defaults to `jules`. The ID must be registered in the composition root. |
+| `WEB_API_HOST` | No | FastAPI control-plane bind address; defaults to `127.0.0.1`. |
+| `WEB_API_PORT` | No | FastAPI control-plane port; defaults to `8090`. |
+| `WEB_CORS_ORIGINS` | No | Comma-delimited local browser origins; defaults to the local Next.js origins. |
+| `LOCAL_DATA_DIR` | No | Ignored directory for local JSON state, JSONL events, Markdown journals, and logs; defaults to `runtime`. |
 | `WEBHOOK_URL` | No | Public HTTPS base URL. When set, the bot uses `/telegram/webhook`; when blank, it uses long polling. |
 | `PORT` | No | Listening port; defaults to `8080` and is normally supplied by Render. |
 | `WEBHOOK_SECRET_TOKEN` | No | Telegram webhook secret token. |
@@ -135,6 +139,39 @@ Leave `WEBHOOK_URL` blank for local long polling. The Telegram application and a
 ```bash
 python -m unittest discover -s tests -v
 ```
+
+## Full local harness: Telegram + browser studio
+
+The repository also includes a **full local harness**. It runs Telegram, a provider-neutral FastAPI control plane, and a Next.js orchestration studio as three local processes that use the same agent contracts and local audit directory.
+
+```text
+Telegram ────────┐
+                 ├── AgentHarness ── Jules adapter ── Jules REST API
+Next.js Studio ─ FastAPI control plane ┘
+                         │
+                         └── runtime/ (JSON state + JSONL events + Markdown journal)
+```
+
+Run all three interfaces together:
+
+```bash
+make install
+make dev
+```
+
+Open `http://127.0.0.1:3000` for the orchestration studio and `http://127.0.0.1:8090/docs` for local API documentation. The studio provides a warm, Claude-inspired workflow workspace with chat composer, agent selection, repository and branch controls, session overview, activity timeline, local transcript access, and dashboard operational signals. The FastAPI service remains bound to loopback by default; the browser does not receive a Jules or Telegram credential.
+
+The local event store writes every browser action and response to ignored files below `runtime/`:
+
+```text
+runtime/
+├── state/conversations.json
+├── events/YYYY-MM-DD.jsonl
+├── journals/YYYY-MM-DD.md
+└── logs/agent-harness.log
+```
+
+Read [LOCAL_HARNESS.md](LOCAL_HARNESS.md) for the runtime topology, endpoints, event persistence model, security boundary, individual process commands, and the path to replace local files with durable shared services. Use `make check` to run the complete offline Python and Next.js validation suite.
 
 ## Render deployment
 
