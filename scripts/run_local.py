@@ -17,6 +17,12 @@ from dotenv import load_dotenv
 ROOT: Final = Path(__file__).resolve().parents[1]
 
 
+def _request_shutdown(_: int, __: object) -> None:
+    """Turn process-manager termination signals into a graceful runner exit."""
+
+    raise KeyboardInterrupt
+
+
 def _command(label: str, args: list[str]) -> tuple[str, list[str]]:
     """Return a labelled command for a child local-harness service."""
 
@@ -26,6 +32,8 @@ def _command(label: str, args: list[str]) -> tuple[str, list[str]]:
 def main() -> int:
     """Start all local interfaces and stop every child when one exits."""
 
+    previous_sigterm = signal.signal(signal.SIGTERM, _request_shutdown)
+    previous_sighup = signal.signal(signal.SIGHUP, _request_shutdown)
     load_dotenv(ROOT / ".env")
     environment = os.environ.copy()
     environment.setdefault("PYTHONUNBUFFERED", "1")
@@ -33,7 +41,7 @@ def main() -> int:
 
     commands = [
         _command("api", [sys.executable, "-m", "apps.api"]),
-        _command("web", ["pnpm", "--dir", "apps/web", "dev", "--", "-p", web_port]),
+        _command("web", ["pnpm", "--dir", "apps/web", "exec", "next", "dev", "-p", web_port]),
         _command("telegram", [sys.executable, "-m", "src.main"]),
     ]
     children: list[tuple[str, subprocess.Popen[str]]] = []
@@ -66,7 +74,10 @@ def main() -> int:
     finally:
         for _, process in children:
             if process.poll() is None:
-                os.killpg(process.pid, signal.SIGTERM)
+                try:
+                    os.killpg(process.pid, signal.SIGTERM)
+                except ProcessLookupError:
+                    continue
         deadline = time.monotonic() + 8
         for _, process in children:
             if process.poll() is None:
@@ -74,7 +85,12 @@ def main() -> int:
                 try:
                     process.wait(timeout=remaining)
                 except subprocess.TimeoutExpired:
-                    os.killpg(process.pid, signal.SIGKILL)
+                    try:
+                        os.killpg(process.pid, signal.SIGKILL)
+                    except ProcessLookupError:
+                        continue
+        signal.signal(signal.SIGTERM, previous_sigterm)
+        signal.signal(signal.SIGHUP, previous_sighup)
 
 
 if __name__ == "__main__":
