@@ -1,0 +1,111 @@
+{
+  "scriptCompleted": true,
+  "filesAnalyzed": 3,
+  "filesSkipped": [],
+  "analysisOutcomes": {
+    "structure": {
+      "succeeded": 3,
+      "failed": 0
+    },
+    "callGraph": {
+      "succeeded": 0,
+      "failed": 0,
+      "skipped": 3
+    }
+  },
+  "results": [
+    {
+      "path": "docs/JULES_API_REFERENCE_NOTES.md",
+      "language": "markdown",
+      "fileCategory": "docs",
+      "totalLines": 13,
+      "nonEmptyLines": 8,
+      "sections": [
+        {
+          "heading": "Jules API Response-Lifecycle Notes",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "Sources",
+          "level": 2,
+          "line": 9
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 2
+      }
+    },
+    {
+      "path": "docs/SHOWCASE_CAPTURE_NOTES.md",
+      "language": "markdown",
+      "fileCategory": "docs",
+      "totalLines": 11,
+      "nonEmptyLines": 8,
+      "sections": [
+        {
+          "heading": "README Showcase Capture Notes",
+          "level": 1,
+          "line": 1
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 1
+      }
+    },
+    {
+      "path": "docs/VERIFICATION.md",
+      "language": "markdown",
+      "fileCategory": "docs",
+      "totalLines": 35,
+      "nonEmptyLines": 18,
+      "sections": [
+        {
+          "heading": "Local Harness Verification Notes",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "2026-08-17: Workspace visual pass",
+          "level": 2,
+          "line": 3
+        },
+        {
+          "heading": "2026-08-17: Temporary sandbox exposure",
+          "level": 2,
+          "line": 11
+        },
+        {
+          "heading": "Post-restart browser verification",
+          "level": 3,
+          "line": 17
+        },
+        {
+          "heading": "2026-08-17: Asynchronous Jules response verification",
+          "level": 2,
+          "line": 21
+        },
+        {
+          "heading": "2026-08-17: Provider progress and control audit",
+          "level": 2,
+          "line": 29
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 6
+      }
+    }
+  ]
+}

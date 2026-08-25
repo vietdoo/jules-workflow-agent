@@ -1,0 +1,600 @@
+{
+  "schemaVersion": 1,
+  "algorithm": "louvain",
+  "totalFiles": 56,
+  "totalBatches": 5,
+  "exportsByPath": {
+    ".gitmodules": [],
+    "apps/__init__.py": [],
+    "apps/api/__init__.py": [],
+    "apps/api/__main__.py": [
+      "main"
+    ],
+    "apps/api/app.py": [
+      "ConversationBody",
+      "AgentSelectionBody",
+      "SourceSelectionBody",
+      "PromptBody",
+      "SessionActionBody",
+      "_root_path",
+      "_raise_http_error",
+      "create_app"
+    ],
+    "apps/web/app/layout.tsx": [
+      "metadata",
+      "RootLayout"
+    ],
+    "apps/web/app/page.tsx": [
+      "HomePage"
+    ],
+    "apps/web/components/studio-shell.tsx": [
+      "StudioShell"
+    ],
+    "apps/web/lib/api.ts": [
+      "controlApi",
+      "eventsWebSocketUrl"
+    ],
+    "apps/web/lib/types.ts": [],
+    "apps/web/next-env.d.ts": [],
+    "apps/web/next.config.mjs": [],
+    "docs/images/studio-activity.webp": [],
+    "docs/images/studio-sessions.webp": [],
+    "docs/images/studio-workspace.webp": [],
+    "scripts/run_local.py": [
+      "_request_shutdown",
+      "_command",
+      "main"
+    ],
+    "src/__init__.py": [],
+    "src/api/__init__.py": [],
+    "src/api/jules_client.py": [
+      "JulesClientError",
+      "JulesAPIError",
+      "JulesReplyPending",
+      "JulesSource",
+      "JulesSession",
+      "JulesClient"
+    ],
+    "src/application/__init__.py": [],
+    "src/application/control_plane.py": [
+      "descriptor_payload",
+      "source_payload",
+      "session_payload",
+      "LocalControlPlane"
+    ],
+    "src/application/harness.py": [
+      "ChatState",
+      "StateStore",
+      "ChatStateStore",
+      "AgentRegistry",
+      "AgentHarness"
+    ],
+    "src/bootstrap.py": [
+      "build_agent_harness"
+    ],
+    "src/config.py": [
+      "ConfigurationError",
+      "Settings",
+      "_required",
+      "_positive_float",
+      "_positive_int",
+      "_boolean",
+      "get_settings"
+    ],
+    "src/domain/__init__.py": [],
+    "src/domain/agent.py": [
+      "AgentDescriptor",
+      "AgentSource",
+      "AgentSession",
+      "AgentReply",
+      "AgentAdapter"
+    ],
+    "src/handlers/__init__.py": [],
+    "src/handlers/message_handlers.py": [
+      "_harness",
+      "_escape",
+      "_home_markup",
+      "_agent_markup",
+      "_session_markup",
+      "_format_session",
+      "_activity_kind",
+      "_format_activities",
+      "_edit_query",
+      "_respond",
+      "_send_error",
+      "_show_home",
+      "start_command",
+      "help_command",
+      "agents_command",
+      "sources_command",
+      "session_command",
+      "activities_command",
+      "sessions_command",
+      "new_session_command",
+      "message_handler",
+      "callback_handler",
+      "_select_agent",
+      "_select_source",
+      "_select_branch",
+      "_open_session",
+      "_confirm_approval",
+      "_approve_session",
+      "_confirm_end",
+      "_end_session",
+      "_reply_in_chunks",
+      "error_handler"
+    ],
+    "src/infrastructure/__init__.py": [],
+    "src/infrastructure/agents/__init__.py": [],
+    "src/infrastructure/agents/jules_agent.py": [
+      "_source_view",
+      "_session_view",
+      "JulesAgent"
+    ],
+    "src/infrastructure/local_store.py": [
+      "_source_to_payload",
+      "_source_from_payload",
+      "_state_to_payload",
+      "_state_from_payload",
+      "JsonChatStateStore",
+      "LocalEventStore"
+    ],
+    "src/main.py": [
+      "_close_client",
+      "build_application",
+      "_webhook_url",
+      "run",
+      "main"
+    ],
+    "tests/__init__.py": [],
+    "tests/test_composition.py": [
+      "CompositionTests"
+    ],
+    "tests/test_control_plane_api.py": [
+      "FakeAgent",
+      "make_settings",
+      "ControlPlaneApiTests"
+    ],
+    "tests/test_harness.py": [
+      "FakeAgent",
+      "HarnessTests"
+    ],
+    "tests/test_jules_activity_summary.py": [
+      "JulesActivitySummaryTests"
+    ]
+  },
+  "batches": [
+    {
+      "batchIndex": 1,
+      "files": [
+        {
+          "path": ".env.example",
+          "language": "config",
+          "sizeLines": 37,
+          "fileCategory": "config"
+        },
+        {
+          "path": "ARCHITECTURE.md",
+          "language": "markdown",
+          "sizeLines": 36,
+          "fileCategory": "docs"
+        },
+        {
+          "path": "CODE_OF_CONDUCT.md",
+          "language": "markdown",
+          "sizeLines": 131,
+          "fileCategory": "docs"
+        },
+        {
+          "path": "CONTRIBUTING.md",
+          "language": "markdown",
+          "sizeLines": 33,
+          "fileCategory": "docs"
+        },
+        {
+          "path": "LOCAL_HARNESS.md",
+          "language": "markdown",
+          "sizeLines": 83,
+          "fileCategory": "docs"
+        },
+        {
+          "path": "Makefile",
+          "language": "makefile",
+          "sizeLines": 26,
+          "fileCategory": "infra"
+        },
+        {
+          "path": "README.md",
+          "language": "markdown",
+          "sizeLines": 361,
+          "fileCategory": "docs"
+        },
+        {
+          "path": "jules_api_audit_notes.md",
+          "language": "markdown",
+          "sizeLines": 21,
+          "fileCategory": "docs"
+        },
+        {
+          "path": "jules_ui_design.md",
+          "language": "markdown",
+          "sizeLines": 27,
+          "fileCategory": "docs"
+        },
+        {
+          "path": "render.yaml",
+          "language": "yaml",
+          "sizeLines": 39,
+          "fileCategory": "config"
+        },
+        {
+          "path": "requirements.txt",
+          "language": "txt",
+          "sizeLines": 5,
+          "fileCategory": "docs"
+        }
+      ],
+      "batchImportData": {
+        ".env.example": [],
+        "ARCHITECTURE.md": [],
+        "CODE_OF_CONDUCT.md": [],
+        "CONTRIBUTING.md": [],
+        "LOCAL_HARNESS.md": [],
+        "Makefile": [],
+        "README.md": [],
+        "jules_api_audit_notes.md": [],
+        "jules_ui_design.md": [],
+        "render.yaml": [],
+        "requirements.txt": []
+      },
+      "neighborMap": {}
+    },
+    {
+      "batchIndex": 2,
+      "files": [
+        {
+          "path": "apps/web/package.json",
+          "language": "json",
+          "sizeLines": 23,
+          "fileCategory": "config"
+        },
+        {
+          "path": "apps/web/pnpm-workspace.yaml",
+          "language": "yaml",
+          "sizeLines": 2,
+          "fileCategory": "config"
+        },
+        {
+          "path": "apps/web/tsconfig.json",
+          "language": "json",
+          "sizeLines": 36,
+          "fileCategory": "config"
+        }
+      ],
+      "batchImportData": {
+        "apps/web/package.json": [],
+        "apps/web/pnpm-workspace.yaml": [],
+        "apps/web/tsconfig.json": []
+      },
+      "neighborMap": {}
+    },
+    {
+      "batchIndex": 3,
+      "files": [
+        {
+          "path": "docs/JULES_API_REFERENCE_NOTES.md",
+          "language": "markdown",
+          "sizeLines": 13,
+          "fileCategory": "docs"
+        },
+        {
+          "path": "docs/SHOWCASE_CAPTURE_NOTES.md",
+          "language": "markdown",
+          "sizeLines": 11,
+          "fileCategory": "docs"
+        },
+        {
+          "path": "docs/VERIFICATION.md",
+          "language": "markdown",
+          "sizeLines": 35,
+          "fileCategory": "docs"
+        }
+      ],
+      "batchImportData": {
+        "docs/JULES_API_REFERENCE_NOTES.md": [],
+        "docs/SHOWCASE_CAPTURE_NOTES.md": [],
+        "docs/VERIFICATION.md": []
+      },
+      "neighborMap": {}
+    },
+    {
+      "batchIndex": 4,
+      "files": [
+        {
+          "path": ".gitmodules",
+          "language": "unknown",
+          "sizeLines": 3,
+          "fileCategory": "code"
+        },
+        {
+          "path": "apps/__init__.py",
+          "language": "python",
+          "sizeLines": 1,
+          "fileCategory": "code"
+        },
+        {
+          "path": "apps/api/__init__.py",
+          "language": "python",
+          "sizeLines": 5,
+          "fileCategory": "code"
+        },
+        {
+          "path": "apps/api/__main__.py",
+          "language": "python",
+          "sizeLines": 25,
+          "fileCategory": "code"
+        },
+        {
+          "path": "apps/api/app.py",
+          "language": "python",
+          "sizeLines": 281,
+          "fileCategory": "code"
+        },
+        {
+          "path": "apps/web/app/globals.css",
+          "language": "css",
+          "sizeLines": 26,
+          "fileCategory": "markup"
+        },
+        {
+          "path": "apps/web/app/layout.tsx",
+          "language": "typescript",
+          "sizeLines": 15,
+          "fileCategory": "code"
+        },
+        {
+          "path": "apps/web/app/page.tsx",
+          "language": "typescript",
+          "sizeLines": 5,
+          "fileCategory": "code"
+        },
+        {
+          "path": "apps/web/components/studio-shell.tsx",
+          "language": "typescript",
+          "sizeLines": 458,
+          "fileCategory": "code"
+        },
+        {
+          "path": "apps/web/lib/api.ts",
+          "language": "typescript",
+          "sizeLines": 74,
+          "fileCategory": "code"
+        },
+        {
+          "path": "apps/web/lib/types.ts",
+          "language": "typescript",
+          "sizeLines": 64,
+          "fileCategory": "code"
+        },
+        {
+          "path": "apps/web/next-env.d.ts",
+          "language": "typescript",
+          "sizeLines": 7,
+          "fileCategory": "code"
+        },
+        {
+          "path": "apps/web/next.config.mjs",
+          "language": "javascript",
+          "sizeLines": 18,
+          "fileCategory": "code"
+        },
+        {
+          "path": "docs/images/studio-activity.webp",
+          "language": "webp",
+          "sizeLines": 808,
+          "fileCategory": "code"
+        },
+        {
+          "path": "docs/images/studio-sessions.webp",
+          "language": "webp",
+          "sizeLines": 611,
+          "fileCategory": "code"
+        },
+        {
+          "path": "docs/images/studio-workspace.webp",
+          "language": "webp",
+          "sizeLines": 593,
+          "fileCategory": "code"
+        },
+        {
+          "path": "scripts/run_local.py",
+          "language": "python",
+          "sizeLines": 97,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/__init__.py",
+          "language": "python",
+          "sizeLines": 4,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/api/__init__.py",
+          "language": "python",
+          "sizeLines": 17,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/api/jules_client.py",
+          "language": "python",
+          "sizeLines": 613,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/application/__init__.py",
+          "language": "python",
+          "sizeLines": 5,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/application/control_plane.py",
+          "language": "python",
+          "sizeLines": 423,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/application/harness.py",
+          "language": "python",
+          "sizeLines": 218,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/bootstrap.py",
+          "language": "python",
+          "sizeLines": 31,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/config.py",
+          "language": "python",
+          "sizeLines": 147,
+          "fileCategory": "code"
+        }
+      ],
+      "batchImportData": {
+        ".gitmodules": [],
+        "apps/__init__.py": [],
+        "apps/api/__init__.py": [],
+        "apps/api/__main__.py": [],
+        "apps/api/app.py": [],
+        "apps/web/app/globals.css": [],
+        "apps/web/app/layout.tsx": [],
+        "apps/web/app/page.tsx": [],
+        "apps/web/components/studio-shell.tsx": [],
+        "apps/web/lib/api.ts": [],
+        "apps/web/lib/types.ts": [],
+        "apps/web/next-env.d.ts": [],
+        "apps/web/next.config.mjs": [],
+        "docs/images/studio-activity.webp": [],
+        "docs/images/studio-sessions.webp": [],
+        "docs/images/studio-workspace.webp": [],
+        "scripts/run_local.py": [],
+        "src/__init__.py": [],
+        "src/api/__init__.py": [],
+        "src/api/jules_client.py": [],
+        "src/application/__init__.py": [],
+        "src/application/control_plane.py": [],
+        "src/application/harness.py": [],
+        "src/bootstrap.py": [],
+        "src/config.py": []
+      },
+      "neighborMap": {}
+    },
+    {
+      "batchIndex": 5,
+      "files": [
+        {
+          "path": "src/domain/__init__.py",
+          "language": "python",
+          "sizeLines": 12,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/domain/agent.py",
+          "language": "python",
+          "sizeLines": 98,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/handlers/__init__.py",
+          "language": "python",
+          "sizeLines": 29,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/handlers/message_handlers.py",
+          "language": "python",
+          "sizeLines": 601,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/infrastructure/__init__.py",
+          "language": "python",
+          "sizeLines": 5,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/infrastructure/agents/__init__.py",
+          "language": "python",
+          "sizeLines": 5,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/infrastructure/agents/jules_agent.py",
+          "language": "python",
+          "sizeLines": 161,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/infrastructure/local_store.py",
+          "language": "python",
+          "sizeLines": 243,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/main.py",
+          "language": "python",
+          "sizeLines": 138,
+          "fileCategory": "code"
+        },
+        {
+          "path": "tests/__init__.py",
+          "language": "python",
+          "sizeLines": 1,
+          "fileCategory": "code"
+        },
+        {
+          "path": "tests/test_composition.py",
+          "language": "python",
+          "sizeLines": 45,
+          "fileCategory": "code"
+        },
+        {
+          "path": "tests/test_control_plane_api.py",
+          "language": "python",
+          "sizeLines": 184,
+          "fileCategory": "code"
+        },
+        {
+          "path": "tests/test_harness.py",
+          "language": "python",
+          "sizeLines": 113,
+          "fileCategory": "code"
+        },
+        {
+          "path": "tests/test_jules_activity_summary.py",
+          "language": "python",
+          "sizeLines": 48,
+          "fileCategory": "code"
+        }
+      ],
+      "batchImportData": {
+        "src/domain/__init__.py": [],
+        "src/domain/agent.py": [],
+        "src/handlers/__init__.py": [],
+        "src/handlers/message_handlers.py": [],
+        "src/infrastructure/__init__.py": [],
+        "src/infrastructure/agents/__init__.py": [],
+        "src/infrastructure/agents/jules_agent.py": [],
+        "src/infrastructure/local_store.py": [],
+        "src/main.py": [],
+        "tests/__init__.py": [],
+        "tests/test_composition.py": [],
+        "tests/test_control_plane_api.py": [],
+        "tests/test_harness.py": [],
+        "tests/test_jules_activity_summary.py": []
+      },
+      "neighborMap": {}
+    }
+  ]
+}

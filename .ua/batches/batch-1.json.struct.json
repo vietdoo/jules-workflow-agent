@@ -1,0 +1,688 @@
+{
+  "scriptCompleted": true,
+  "filesAnalyzed": 10,
+  "filesSkipped": [
+    "requirements.txt"
+  ],
+  "analysisOutcomes": {
+    "structure": {
+      "succeeded": 10,
+      "failed": 0
+    },
+    "callGraph": {
+      "succeeded": 0,
+      "failed": 0,
+      "skipped": 10
+    }
+  },
+  "results": [
+    {
+      "path": ".env.example",
+      "language": "config",
+      "fileCategory": "config",
+      "totalLines": 37,
+      "nonEmptyLines": 31,
+      "definitions": [
+        {
+          "name": "TELEGRAM_BOT_TOKEN",
+          "kind": "variable",
+          "fields": [],
+          "startLine": 2,
+          "endLine": 2
+        },
+        {
+          "name": "JULES_API_KEY",
+          "kind": "variable",
+          "fields": [],
+          "startLine": 3,
+          "endLine": 3
+        },
+        {
+          "name": "JULES_API_URL",
+          "kind": "variable",
+          "fields": [],
+          "startLine": 6,
+          "endLine": 6
+        },
+        {
+          "name": "WEBHOOK_URL",
+          "kind": "variable",
+          "fields": [],
+          "startLine": 11,
+          "endLine": 11
+        },
+        {
+          "name": "PORT",
+          "kind": "variable",
+          "fields": [],
+          "startLine": 12,
+          "endLine": 12
+        },
+        {
+          "name": "WEBHOOK_SECRET_TOKEN",
+          "kind": "variable",
+          "fields": [],
+          "startLine": 13,
+          "endLine": 13
+        },
+        {
+          "name": "JULES_TIMEOUT_SECONDS",
+          "kind": "variable",
+          "fields": [],
+          "startLine": 16,
+          "endLine": 16
+        },
+        {
+          "name": "JULES_POLL_INTERVAL_SECONDS",
+          "kind": "variable",
+          "fields": [],
+          "startLine": 17,
+          "endLine": 17
+        },
+        {
+          "name": "JULES_REPLY_TIMEOUT_SECONDS",
+          "kind": "variable",
+          "fields": [],
+          "startLine": 18,
+          "endLine": 18
+        },
+        {
+          "name": "LOG_LEVEL",
+          "kind": "variable",
+          "fields": [],
+          "startLine": 19,
+          "endLine": 19
+        },
+        {
+          "name": "JULES_SOURCE",
+          "kind": "variable",
+          "fields": [],
+          "startLine": 23,
+          "endLine": 23
+        },
+        {
+          "name": "JULES_STARTING_BRANCH",
+          "kind": "variable",
+          "fields": [],
+          "startLine": 24,
+          "endLine": 24
+        },
+        {
+          "name": "JULES_REQUIRE_PLAN_APPROVAL",
+          "kind": "variable",
+          "fields": [],
+          "startLine": 26,
+          "endLine": 26
+        },
+        {
+          "name": "JULES_AUTOMATION_MODE",
+          "kind": "variable",
+          "fields": [],
+          "startLine": 28,
+          "endLine": 28
+        },
+        {
+          "name": "AGENT_DEFAULT_ID",
+          "kind": "variable",
+          "fields": [],
+          "startLine": 31,
+          "endLine": 31
+        },
+        {
+          "name": "WEB_API_HOST",
+          "kind": "variable",
+          "fields": [],
+          "startLine": 34,
+          "endLine": 34
+        },
+        {
+          "name": "WEB_API_PORT",
+          "kind": "variable",
+          "fields": [],
+          "startLine": 35,
+          "endLine": 35
+        },
+        {
+          "name": "WEB_CORS_ORIGINS",
+          "kind": "variable",
+          "fields": [],
+          "startLine": 36,
+          "endLine": 36
+        },
+        {
+          "name": "LOCAL_DATA_DIR",
+          "kind": "variable",
+          "fields": [],
+          "startLine": 37,
+          "endLine": 37
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "definitionCount": 19
+      }
+    },
+    {
+      "path": "ARCHITECTURE.md",
+      "language": "markdown",
+      "fileCategory": "docs",
+      "totalLines": 36,
+      "nonEmptyLines": 23,
+      "sections": [
+        {
+          "heading": "Agent Harness Architecture",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "Goal",
+          "level": 2,
+          "line": 3
+        },
+        {
+          "heading": "Layers",
+          "level": 2,
+          "line": 7
+        },
+        {
+          "heading": "Agent contract",
+          "level": 2,
+          "line": 17
+        },
+        {
+          "heading": "State and scale",
+          "level": 2,
+          "line": 28
+        },
+        {
+          "heading": "Operational principles",
+          "level": 2,
+          "line": 34
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 6
+      }
+    },
+    {
+      "path": "CODE_OF_CONDUCT.md",
+      "language": "markdown",
+      "fileCategory": "docs",
+      "totalLines": 131,
+      "nonEmptyLines": 96,
+      "sections": [
+        {
+          "heading": "Contributor Covenant Code of Conduct",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "Our Pledge",
+          "level": 2,
+          "line": 3
+        },
+        {
+          "heading": "Our Standards",
+          "level": 2,
+          "line": 15
+        },
+        {
+          "heading": "Enforcement Responsibilities",
+          "level": 2,
+          "line": 39
+        },
+        {
+          "heading": "Scope",
+          "level": 2,
+          "line": 51
+        },
+        {
+          "heading": "Enforcement",
+          "level": 2,
+          "line": 59
+        },
+        {
+          "heading": "Enforcement Guidelines",
+          "level": 2,
+          "line": 68
+        },
+        {
+          "heading": "1. Correction",
+          "level": 3,
+          "line": 73
+        },
+        {
+          "heading": "2. Warning",
+          "level": 3,
+          "line": 82
+        },
+        {
+          "heading": "3. Temporary Ban",
+          "level": 3,
+          "line": 94
+        },
+        {
+          "heading": "4. Permanent Ban",
+          "level": 3,
+          "line": 105
+        },
+        {
+          "heading": "Attribution",
+          "level": 2,
+          "line": 114
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 12
+      }
+    },
+    {
+      "path": "CONTRIBUTING.md",
+      "language": "markdown",
+      "fileCategory": "docs",
+      "totalLines": 33,
+      "nonEmptyLines": 21,
+      "sections": [
+        {
+          "heading": "Contributing to Jules Workflow Agent",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "Where do I go from here?",
+          "level": 2,
+          "line": 5
+        },
+        {
+          "heading": "Setting up your environment",
+          "level": 2,
+          "line": 9
+        },
+        {
+          "heading": "Making Changes",
+          "level": 2,
+          "line": 18
+        },
+        {
+          "heading": "Submitting a Pull Request",
+          "level": 2,
+          "line": 24
+        },
+        {
+          "heading": "Code of Conduct",
+          "level": 2,
+          "line": 31
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 6
+      }
+    },
+    {
+      "path": "LOCAL_HARNESS.md",
+      "language": "markdown",
+      "fileCategory": "docs",
+      "totalLines": 83,
+      "nonEmptyLines": 58,
+      "sections": [
+        {
+          "heading": "Jules Workflow Local Harness",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "Purpose",
+          "level": 2,
+          "line": 3
+        },
+        {
+          "heading": "Runtime topology",
+          "level": 2,
+          "line": 7
+        },
+        {
+          "heading": "Component boundaries",
+          "level": 2,
+          "line": 23
+        },
+        {
+          "heading": "Local persistence contract",
+          "level": 2,
+          "line": 34
+        },
+        {
+          "heading": "Run modes",
+          "level": 2,
+          "line": 40
+        },
+        {
+          "heading": "Browser workflow",
+          "level": 2,
+          "line": 50
+        },
+        {
+          "heading": "First run",
+          "level": 2,
+          "line": 56
+        },
+        {
+          "heading": "Environment additions",
+          "level": 2,
+          "line": 67
+        },
+        {
+          "heading": "Extending with another agent",
+          "level": 2,
+          "line": 77
+        },
+        {
+          "heading": "Security notes",
+          "level": 2,
+          "line": 81
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 11
+      }
+    },
+    {
+      "path": "Makefile",
+      "language": "makefile",
+      "fileCategory": "infra",
+      "totalLines": 26,
+      "nonEmptyLines": 19,
+      "steps": [
+        {
+          "name": "install",
+          "startLine": 3,
+          "endLine": 6
+        },
+        {
+          "name": "api",
+          "startLine": 7,
+          "endLine": 9
+        },
+        {
+          "name": "web",
+          "startLine": 10,
+          "endLine": 12
+        },
+        {
+          "name": "telegram",
+          "startLine": 13,
+          "endLine": 15
+        },
+        {
+          "name": "dev",
+          "startLine": 16,
+          "endLine": 18
+        },
+        {
+          "name": "test",
+          "startLine": 19,
+          "endLine": 21
+        },
+        {
+          "name": "check",
+          "startLine": 22,
+          "endLine": 27
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "stepCount": 7
+      }
+    },
+    {
+      "path": "README.md",
+      "language": "markdown",
+      "fileCategory": "docs",
+      "totalLines": 361,
+      "nonEmptyLines": 272,
+      "sections": [
+        {
+          "heading": "Jules Workflow Agent",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "Table of Contents",
+          "level": 2,
+          "line": 13
+        },
+        {
+          "heading": "Studio showcase",
+          "level": 2,
+          "line": 31
+        },
+        {
+          "heading": "Session ledger",
+          "level": 3,
+          "line": 45
+        },
+        {
+          "heading": "Local audit trail",
+          "level": 3,
+          "line": 51
+        },
+        {
+          "heading": "Features",
+          "level": 2,
+          "line": 59
+        },
+        {
+          "heading": "User interface",
+          "level": 2,
+          "line": 78
+        },
+        {
+          "heading": "Quick Start",
+          "level": 2,
+          "line": 95
+        },
+        {
+          "heading": "Project layout",
+          "level": 2,
+          "line": 116
+        },
+        {
+          "heading": "Prerequisites",
+          "level": 2,
+          "line": 169
+        },
+        {
+          "heading": "Configuration",
+          "level": 2,
+          "line": 175
+        },
+        {
+          "heading": "Local development",
+          "level": 2,
+          "line": 207
+        },
+        {
+          "heading": "Full local harness: Telegram + browser studio",
+          "level": 2,
+          "line": 225
+        },
+        {
+          "heading": "Render deployment",
+          "level": 2,
+          "line": 264
+        },
+        {
+          "heading": "Jules request lifecycle",
+          "level": 2,
+          "line": 283
+        },
+        {
+          "heading": "Validation",
+          "level": 2,
+          "line": 307
+        },
+        {
+          "heading": "Security and limitations",
+          "level": 2,
+          "line": 318
+        },
+        {
+          "heading": "Troubleshooting",
+          "level": 2,
+          "line": 324
+        },
+        {
+          "heading": "The bot exits with a configuration error",
+          "level": 3,
+          "line": 326
+        },
+        {
+          "heading": "No repositories appear",
+          "level": 3,
+          "line": 330
+        },
+        {
+          "heading": "Jules returns HTTP 400 when creating a session",
+          "level": 3,
+          "line": 334
+        },
+        {
+          "heading": "The approval button is unavailable",
+          "level": 3,
+          "line": 338
+        },
+        {
+          "heading": "Jules timed out",
+          "level": 3,
+          "line": 342
+        },
+        {
+          "heading": "Render starts but Telegram does not deliver messages",
+          "level": 3,
+          "line": 346
+        },
+        {
+          "heading": "Contributing",
+          "level": 2,
+          "line": 350
+        },
+        {
+          "heading": "References",
+          "level": 2,
+          "line": 356
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 26
+      }
+    },
+    {
+      "path": "jules_api_audit_notes.md",
+      "language": "markdown",
+      "fileCategory": "docs",
+      "totalLines": 21,
+      "nonEmptyLines": 16,
+      "sections": [
+        {
+          "heading": "Jules API audit notes",
+          "level": 1,
+          "line": 1
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 1
+      }
+    },
+    {
+      "path": "jules_ui_design.md",
+      "language": "markdown",
+      "fileCategory": "docs",
+      "totalLines": 27,
+      "nonEmptyLines": 18,
+      "sections": [
+        {
+          "heading": "Jules workflow and Telegram UI design",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "API coverage",
+          "level": 2,
+          "line": 3
+        },
+        {
+          "heading": "Telegram controls",
+          "level": 2,
+          "line": 7
+        },
+        {
+          "heading": "State model",
+          "level": 2,
+          "line": 21
+        },
+        {
+          "heading": "Presentation",
+          "level": 2,
+          "line": 25
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 5
+      }
+    },
+    {
+      "path": "render.yaml",
+      "language": "yaml",
+      "fileCategory": "config",
+      "totalLines": 39,
+      "nonEmptyLines": 39,
+      "sections": [
+        {
+          "heading": "services",
+          "level": 1,
+          "line": 1
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 1
+      }
+    }
+  ]
+}

@@ -1,0 +1,4052 @@
+{
+  "scriptCompleted": true,
+  "filesAnalyzed": 14,
+  "filesSkipped": [],
+  "analysisOutcomes": {
+    "structure": {
+      "succeeded": 14,
+      "failed": 0
+    },
+    "callGraph": {
+      "succeeded": 14,
+      "failed": 0,
+      "skipped": 0
+    }
+  },
+  "results": [
+    {
+      "path": "src/domain/__init__.py",
+      "language": "python",
+      "fileCategory": "code",
+      "totalLines": 12,
+      "nonEmptyLines": 10,
+      "metrics": {
+        "importCount": 1,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/domain/agent.py",
+      "language": "python",
+      "fileCategory": "code",
+      "totalLines": 98,
+      "nonEmptyLines": 71,
+      "classes": [
+        {
+          "name": "AgentDescriptor",
+          "startLine": 13,
+          "endLine": 20,
+          "methods": [],
+          "properties": [
+            "agent_id",
+            "display_name",
+            "description",
+            "icon",
+            "capabilities"
+          ]
+        },
+        {
+          "name": "AgentSource",
+          "startLine": 24,
+          "endLine": 31,
+          "methods": [],
+          "properties": [
+            "name",
+            "label",
+            "default_branch",
+            "branches",
+            "metadata"
+          ]
+        },
+        {
+          "name": "AgentSession",
+          "startLine": 35,
+          "endLine": 47,
+          "methods": [],
+          "properties": [
+            "name",
+            "identifier",
+            "title",
+            "state",
+            "state_label",
+            "url",
+            "source_name",
+            "starting_branch",
+            "require_plan_approval",
+            "metadata"
+          ]
+        },
+        {
+          "name": "AgentReply",
+          "startLine": 51,
+          "endLine": 57,
+          "methods": [],
+          "properties": [
+            "text",
+            "session",
+            "agent_id",
+            "metadata"
+          ]
+        },
+        {
+          "name": "AgentAdapter",
+          "startLine": 60,
+          "endLine": 98,
+          "methods": [
+            "descriptor",
+            "ask",
+            "list_sources",
+            "get_session",
+            "list_activities",
+            "list_sessions",
+            "approve_plan",
+            "delete_session",
+            "close"
+          ],
+          "properties": []
+        }
+      ],
+      "exports": [
+        {
+          "name": "AgentDescriptor",
+          "line": 12,
+          "isDefault": false
+        },
+        {
+          "name": "AgentSource",
+          "line": 23,
+          "isDefault": false
+        },
+        {
+          "name": "AgentSession",
+          "line": 34,
+          "isDefault": false
+        },
+        {
+          "name": "AgentReply",
+          "line": 50,
+          "isDefault": false
+        },
+        {
+          "name": "AgentAdapter",
+          "line": 60,
+          "isDefault": false
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 5,
+        "functionCount": 0,
+        "classCount": 5
+      }
+    },
+    {
+      "path": "src/handlers/__init__.py",
+      "language": "python",
+      "fileCategory": "code",
+      "totalLines": 29,
+      "nonEmptyLines": 27,
+      "metrics": {
+        "importCount": 1,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/handlers/message_handlers.py",
+      "language": "python",
+      "fileCategory": "code",
+      "totalLines": 601,
+      "nonEmptyLines": 500,
+      "functions": [
+        {
+          "name": "_harness",
+          "startLine": 25,
+          "endLine": 31,
+          "params": [
+            "context"
+          ]
+        },
+        {
+          "name": "_escape",
+          "startLine": 34,
+          "endLine": 37,
+          "params": [
+            "value"
+          ]
+        },
+        {
+          "name": "_home_markup",
+          "startLine": 40,
+          "endLine": 59,
+          "params": []
+        },
+        {
+          "name": "_agent_markup",
+          "startLine": 62,
+          "endLine": 77,
+          "params": [
+            "harness",
+            "state"
+          ]
+        },
+        {
+          "name": "_session_markup",
+          "startLine": 80,
+          "endLine": 103,
+          "params": [
+            "session",
+            "agent_name"
+          ]
+        },
+        {
+          "name": "_format_session",
+          "startLine": 106,
+          "endLine": 124,
+          "params": [
+            "session",
+            "state",
+            "agent_name"
+          ]
+        },
+        {
+          "name": "_activity_kind",
+          "startLine": 127,
+          "endLine": 154,
+          "params": [
+            "activity"
+          ]
+        },
+        {
+          "name": "_format_activities",
+          "startLine": 157,
+          "endLine": 176,
+          "params": [
+            "activities",
+            "agent_name"
+          ]
+        },
+        {
+          "name": "_edit_query",
+          "startLine": 179,
+          "endLine": 191,
+          "params": [
+            "query",
+            "text",
+            "markup"
+          ]
+        },
+        {
+          "name": "_respond",
+          "startLine": 194,
+          "endLine": 205,
+          "params": [
+            "update",
+            "text",
+            "markup"
+          ]
+        },
+        {
+          "name": "_send_error",
+          "startLine": 208,
+          "endLine": 216,
+          "params": [
+            "update",
+            "detail"
+          ]
+        },
+        {
+          "name": "_show_home",
+          "startLine": 219,
+          "endLine": 238,
+          "params": [
+            "update",
+            "context"
+          ]
+        },
+        {
+          "name": "start_command",
+          "startLine": 241,
+          "endLine": 244,
+          "params": [
+            "update",
+            "context"
+          ]
+        },
+        {
+          "name": "help_command",
+          "startLine": 247,
+          "endLine": 264,
+          "params": [
+            "update",
+            "context"
+          ]
+        },
+        {
+          "name": "agents_command",
+          "startLine": 267,
+          "endLine": 279,
+          "params": [
+            "update",
+            "context"
+          ]
+        },
+        {
+          "name": "sources_command",
+          "startLine": 282,
+          "endLine": 304,
+          "params": [
+            "update",
+            "context"
+          ]
+        },
+        {
+          "name": "session_command",
+          "startLine": 307,
+          "endLine": 324,
+          "params": [
+            "update",
+            "context"
+          ]
+        },
+        {
+          "name": "activities_command",
+          "startLine": 327,
+          "endLine": 353,
+          "params": [
+            "update",
+            "context"
+          ]
+        },
+        {
+          "name": "sessions_command",
+          "startLine": 356,
+          "endLine": 380,
+          "params": [
+            "update",
+            "context"
+          ]
+        },
+        {
+          "name": "new_session_command",
+          "startLine": 383,
+          "endLine": 392,
+          "params": [
+            "update",
+            "context"
+          ]
+        },
+        {
+          "name": "message_handler",
+          "startLine": 395,
+          "endLine": 418,
+          "params": [
+            "update",
+            "context"
+          ]
+        },
+        {
+          "name": "callback_handler",
+          "startLine": 421,
+          "endLine": 472,
+          "params": [
+            "update",
+            "context"
+          ]
+        },
+        {
+          "name": "_select_agent",
+          "startLine": 475,
+          "endLine": 490,
+          "params": [
+            "update",
+            "context",
+            "key"
+          ]
+        },
+        {
+          "name": "_select_source",
+          "startLine": 493,
+          "endLine": 510,
+          "params": [
+            "update",
+            "context",
+            "key"
+          ]
+        },
+        {
+          "name": "_select_branch",
+          "startLine": 513,
+          "endLine": 526,
+          "params": [
+            "update",
+            "context",
+            "key"
+          ]
+        },
+        {
+          "name": "_open_session",
+          "startLine": 529,
+          "endLine": 541,
+          "params": [
+            "update",
+            "context",
+            "key"
+          ]
+        },
+        {
+          "name": "_confirm_approval",
+          "startLine": 544,
+          "endLine": 547,
+          "params": [
+            "update"
+          ]
+        },
+        {
+          "name": "_approve_session",
+          "startLine": 550,
+          "endLine": 561,
+          "params": [
+            "update",
+            "context"
+          ]
+        },
+        {
+          "name": "_confirm_end",
+          "startLine": 564,
+          "endLine": 567,
+          "params": [
+            "update"
+          ]
+        },
+        {
+          "name": "_end_session",
+          "startLine": 570,
+          "endLine": 581,
+          "params": [
+            "update",
+            "context"
+          ]
+        },
+        {
+          "name": "_reply_in_chunks",
+          "startLine": 584,
+          "endLine": 590,
+          "params": [
+            "message",
+            "text",
+            "markup"
+          ]
+        },
+        {
+          "name": "error_handler",
+          "startLine": 593,
+          "endLine": 601,
+          "params": [
+            "update",
+            "context"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "_harness",
+          "line": 25,
+          "isDefault": false
+        },
+        {
+          "name": "_escape",
+          "line": 34,
+          "isDefault": false
+        },
+        {
+          "name": "_home_markup",
+          "line": 40,
+          "isDefault": false
+        },
+        {
+          "name": "_agent_markup",
+          "line": 62,
+          "isDefault": false
+        },
+        {
+          "name": "_session_markup",
+          "line": 80,
+          "isDefault": false
+        },
+        {
+          "name": "_format_session",
+          "line": 106,
+          "isDefault": false
+        },
+        {
+          "name": "_activity_kind",
+          "line": 127,
+          "isDefault": false
+        },
+        {
+          "name": "_format_activities",
+          "line": 157,
+          "isDefault": false
+        },
+        {
+          "name": "_edit_query",
+          "line": 179,
+          "isDefault": false
+        },
+        {
+          "name": "_respond",
+          "line": 194,
+          "isDefault": false
+        },
+        {
+          "name": "_send_error",
+          "line": 208,
+          "isDefault": false
+        },
+        {
+          "name": "_show_home",
+          "line": 219,
+          "isDefault": false
+        },
+        {
+          "name": "start_command",
+          "line": 241,
+          "isDefault": false
+        },
+        {
+          "name": "help_command",
+          "line": 247,
+          "isDefault": false
+        },
+        {
+          "name": "agents_command",
+          "line": 267,
+          "isDefault": false
+        },
+        {
+          "name": "sources_command",
+          "line": 282,
+          "isDefault": false
+        },
+        {
+          "name": "session_command",
+          "line": 307,
+          "isDefault": false
+        },
+        {
+          "name": "activities_command",
+          "line": 327,
+          "isDefault": false
+        },
+        {
+          "name": "sessions_command",
+          "line": 356,
+          "isDefault": false
+        },
+        {
+          "name": "new_session_command",
+          "line": 383,
+          "isDefault": false
+        },
+        {
+          "name": "message_handler",
+          "line": 395,
+          "isDefault": false
+        },
+        {
+          "name": "callback_handler",
+          "line": 421,
+          "isDefault": false
+        },
+        {
+          "name": "_select_agent",
+          "line": 475,
+          "isDefault": false
+        },
+        {
+          "name": "_select_source",
+          "line": 493,
+          "isDefault": false
+        },
+        {
+          "name": "_select_branch",
+          "line": 513,
+          "isDefault": false
+        },
+        {
+          "name": "_open_session",
+          "line": 529,
+          "isDefault": false
+        },
+        {
+          "name": "_confirm_approval",
+          "line": 544,
+          "isDefault": false
+        },
+        {
+          "name": "_approve_session",
+          "line": 550,
+          "isDefault": false
+        },
+        {
+          "name": "_confirm_end",
+          "line": 564,
+          "isDefault": false
+        },
+        {
+          "name": "_end_session",
+          "line": 570,
+          "isDefault": false
+        },
+        {
+          "name": "_reply_in_chunks",
+          "line": 584,
+          "isDefault": false
+        },
+        {
+          "name": "error_handler",
+          "line": 593,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "_harness",
+          "callee": "context.application.bot_data.get",
+          "lineNumber": 28
+        },
+        {
+          "caller": "_harness",
+          "callee": "isinstance",
+          "lineNumber": 29
+        },
+        {
+          "caller": "_harness",
+          "callee": "RuntimeError",
+          "lineNumber": 30
+        },
+        {
+          "caller": "_escape",
+          "callee": "escape",
+          "lineNumber": 37
+        },
+        {
+          "caller": "_escape",
+          "callee": "str",
+          "lineNumber": 37
+        },
+        {
+          "caller": "_home_markup",
+          "callee": "InlineKeyboardMarkup",
+          "lineNumber": 43
+        },
+        {
+          "caller": "_home_markup",
+          "callee": "InlineKeyboardButton",
+          "lineNumber": 46
+        },
+        {
+          "caller": "_home_markup",
+          "callee": "InlineKeyboardButton",
+          "lineNumber": 47
+        },
+        {
+          "caller": "_home_markup",
+          "callee": "InlineKeyboardButton",
+          "lineNumber": 50
+        },
+        {
+          "caller": "_home_markup",
+          "callee": "InlineKeyboardButton",
+          "lineNumber": 51
+        },
+        {
+          "caller": "_home_markup",
+          "callee": "InlineKeyboardButton",
+          "lineNumber": 54
+        },
+        {
+          "caller": "_home_markup",
+          "callee": "InlineKeyboardButton",
+          "lineNumber": 55
+        },
+        {
+          "caller": "_home_markup",
+          "callee": "InlineKeyboardButton",
+          "lineNumber": 57
+        },
+        {
+          "caller": "_agent_markup",
+          "callee": "harness.registry.descriptors",
+          "lineNumber": 65
+        },
+        {
+          "caller": "_agent_markup",
+          "callee": "str",
+          "lineNumber": 66
+        },
+        {
+          "caller": "_agent_markup",
+          "callee": "enumerate",
+          "lineNumber": 66
+        },
+        {
+          "caller": "_agent_markup",
+          "callee": "InlineKeyboardButton",
+          "lineNumber": 69
+        },
+        {
+          "caller": "_agent_markup",
+          "callee": "f\"{descriptor.icon} {descriptor.display_name}\".strip",
+          "lineNumber": 70
+        },
+        {
+          "caller": "_agent_markup",
+          "callee": "enumerate",
+          "lineNumber": 74
+        },
+        {
+          "caller": "_agent_markup",
+          "callee": "rows.append",
+          "lineNumber": 76
+        },
+        {
+          "caller": "_agent_markup",
+          "callee": "InlineKeyboardButton",
+          "lineNumber": 76
+        },
+        {
+          "caller": "_agent_markup",
+          "callee": "InlineKeyboardMarkup",
+          "lineNumber": 77
+        },
+        {
+          "caller": "_session_markup",
+          "callee": "InlineKeyboardButton",
+          "lineNumber": 85
+        },
+        {
+          "caller": "_session_markup",
+          "callee": "InlineKeyboardButton",
+          "lineNumber": 86
+        },
+        {
+          "caller": "_session_markup",
+          "callee": "(session.state or \"\").upper",
+          "lineNumber": 89
+        },
+        {
+          "caller": "_session_markup",
+          "callee": "rows.append",
+          "lineNumber": 91
+        },
+        {
+          "caller": "_session_markup",
+          "callee": "InlineKeyboardButton",
+          "lineNumber": 91
+        },
+        {
+          "caller": "_session_markup",
+          "callee": "rows.append",
+          "lineNumber": 93
+        },
+        {
+          "caller": "_session_markup",
+          "callee": "InlineKeyboardButton",
+          "lineNumber": 93
+        },
+        {
+          "caller": "_session_markup",
+          "callee": "rows.extend",
+          "lineNumber": 94
+        },
+        {
+          "caller": "_session_markup",
+          "callee": "InlineKeyboardButton",
+          "lineNumber": 97
+        },
+        {
+          "caller": "_session_markup",
+          "callee": "InlineKeyboardButton",
+          "lineNumber": 98
+        },
+        {
+          "caller": "_session_markup",
+          "callee": "InlineKeyboardButton",
+          "lineNumber": 100
+        },
+        {
+          "caller": "_session_markup",
+          "callee": "InlineKeyboardMarkup",
+          "lineNumber": 103
+        },
+        {
+          "caller": "_format_session",
+          "callee": "_escape",
+          "lineNumber": 110
+        },
+        {
+          "caller": "_format_session",
+          "callee": "_escape",
+          "lineNumber": 112
+        },
+        {
+          "caller": "_format_session",
+          "callee": "_escape",
+          "lineNumber": 113
+        },
+        {
+          "caller": "_format_session",
+          "callee": "_escape",
+          "lineNumber": 114
+        },
+        {
+          "caller": "_format_session",
+          "callee": "lines.append",
+          "lineNumber": 119
+        },
+        {
+          "caller": "_format_session",
+          "callee": "_escape",
+          "lineNumber": 119
+        },
+        {
+          "caller": "_format_session",
+          "callee": "lines.append",
+          "lineNumber": 121
+        },
+        {
+          "caller": "_format_session",
+          "callee": "_escape",
+          "lineNumber": 121
+        },
+        {
+          "caller": "_format_session",
+          "callee": "lines.append",
+          "lineNumber": 123
+        },
+        {
+          "caller": "_format_session",
+          "callee": "_escape",
+          "lineNumber": 123
+        },
+        {
+          "caller": "_format_session",
+          "callee": "\"\\n\".join",
+          "lineNumber": 124
+        },
+        {
+          "caller": "_activity_kind",
+          "callee": "isinstance",
+          "lineNumber": 130
+        },
+        {
+          "caller": "_activity_kind",
+          "callee": "activity.get",
+          "lineNumber": 130
+        },
+        {
+          "caller": "_activity_kind",
+          "callee": "str",
+          "lineNumber": 131
+        },
+        {
+          "caller": "_activity_kind",
+          "callee": "activity[\"agentMessaged\"].get",
+          "lineNumber": 131
+        },
+        {
+          "caller": "_activity_kind",
+          "callee": "isinstance",
+          "lineNumber": 132
+        },
+        {
+          "caller": "_activity_kind",
+          "callee": "activity.get",
+          "lineNumber": 132
+        },
+        {
+          "caller": "_activity_kind",
+          "callee": "str",
+          "lineNumber": 133
+        },
+        {
+          "caller": "_activity_kind",
+          "callee": "activity[\"userMessaged\"].get",
+          "lineNumber": 133
+        },
+        {
+          "caller": "_activity_kind",
+          "callee": "isinstance",
+          "lineNumber": 134
+        },
+        {
+          "caller": "_activity_kind",
+          "callee": "activity.get",
+          "lineNumber": 134
+        },
+        {
+          "caller": "_activity_kind",
+          "callee": "activity[\"planGenerated\"].get",
+          "lineNumber": 135
+        },
+        {
+          "caller": "_activity_kind",
+          "callee": "plan.get",
+          "lineNumber": 136
+        },
+        {
+          "caller": "_activity_kind",
+          "callee": "isinstance",
+          "lineNumber": 136
+        },
+        {
+          "caller": "_activity_kind",
+          "callee": "str",
+          "lineNumber": 138
+        },
+        {
+          "caller": "_activity_kind",
+          "callee": "step.get",
+          "lineNumber": 138
+        },
+        {
+          "caller": "_activity_kind",
+          "callee": "isinstance",
+          "lineNumber": 140
+        },
+        {
+          "caller": "_activity_kind",
+          "callee": "step.get",
+          "lineNumber": 140
+        },
+        {
+          "caller": "_activity_kind",
+          "callee": "\"; \".join",
+          "lineNumber": 142
+        },
+        {
+          "caller": "_activity_kind",
+          "callee": "isinstance",
+          "lineNumber": 143
+        },
+        {
+          "caller": "_activity_kind",
+          "callee": "activity.get",
+          "lineNumber": 143
+        },
+        {
+          "caller": "_activity_kind",
+          "callee": "isinstance",
+          "lineNumber": 145
+        },
+        {
+          "caller": "_activity_kind",
+          "callee": "activity.get",
+          "lineNumber": 145
+        },
+        {
+          "caller": "_activity_kind",
+          "callee": "f\"{progress.get('title', 'Progress update')}: {progress.get('description', '')}\".strip",
+          "lineNumber": 147
+        },
+        {
+          "caller": "_activity_kind",
+          "callee": "progress.get",
+          "lineNumber": 147
+        },
+        {
+          "caller": "_activity_kind",
+          "callee": "progress.get",
+          "lineNumber": 147
+        },
+        {
+          "caller": "_activity_kind",
+          "callee": "isinstance",
+          "lineNumber": 148
+        },
+        {
+          "caller": "_activity_kind",
+          "callee": "activity.get",
+          "lineNumber": 148
+        },
+        {
+          "caller": "_activity_kind",
+          "callee": "isinstance",
+          "lineNumber": 150
+        },
+        {
+          "caller": "_activity_kind",
+          "callee": "activity.get",
+          "lineNumber": 150
+        },
+        {
+          "caller": "_activity_kind",
+          "callee": "str",
+          "lineNumber": 151
+        },
+        {
+          "caller": "_activity_kind",
+          "callee": "activity[\"sessionFailed\"].get",
+          "lineNumber": 151
+        },
+        {
+          "caller": "_activity_kind",
+          "callee": "activity.get",
+          "lineNumber": 152
+        },
+        {
+          "caller": "_activity_kind",
+          "callee": "len",
+          "lineNumber": 153
+        },
+        {
+          "caller": "_activity_kind",
+          "callee": "str",
+          "lineNumber": 154
+        },
+        {
+          "caller": "_activity_kind",
+          "callee": "activity.get",
+          "lineNumber": 154
+        },
+        {
+          "caller": "_format_activities",
+          "callee": "_escape",
+          "lineNumber": 161
+        },
+        {
+          "caller": "_format_activities",
+          "callee": "_escape",
+          "lineNumber": 162
+        },
+        {
+          "caller": "_format_activities",
+          "callee": "_activity_kind",
+          "lineNumber": 164
+        },
+        {
+          "caller": "_format_activities",
+          "callee": "str",
+          "lineNumber": 165
+        },
+        {
+          "caller": "_format_activities",
+          "callee": "activity.get",
+          "lineNumber": 165
+        },
+        {
+          "caller": "_format_activities",
+          "callee": "timestamp.split(\"T\", 1)[-1].replace",
+          "lineNumber": 167
+        },
+        {
+          "caller": "_format_activities",
+          "callee": "timestamp.split",
+          "lineNumber": 167
+        },
+        {
+          "caller": "_format_activities",
+          "callee": "detail.strip",
+          "lineNumber": 168
+        },
+        {
+          "caller": "_format_activities",
+          "callee": "len",
+          "lineNumber": 169
+        },
+        {
+          "caller": "_format_activities",
+          "callee": "lines.append",
+          "lineNumber": 171
+        },
+        {
+          "caller": "_format_activities",
+          "callee": "_escape",
+          "lineNumber": 171
+        },
+        {
+          "caller": "_format_activities",
+          "callee": "_escape",
+          "lineNumber": 171
+        },
+        {
+          "caller": "_format_activities",
+          "callee": "lines.append",
+          "lineNumber": 172
+        },
+        {
+          "caller": "_format_activities",
+          "callee": "_escape",
+          "lineNumber": 172
+        },
+        {
+          "caller": "_format_activities",
+          "callee": "activity.get",
+          "lineNumber": 173
+        },
+        {
+          "caller": "_format_activities",
+          "callee": "lines.append",
+          "lineNumber": 174
+        },
+        {
+          "caller": "_format_activities",
+          "callee": "len",
+          "lineNumber": 174
+        },
+        {
+          "caller": "_format_activities",
+          "callee": "lines.append",
+          "lineNumber": 175
+        },
+        {
+          "caller": "_format_activities",
+          "callee": "\"\\n\".join(lines).strip",
+          "lineNumber": 176
+        },
+        {
+          "caller": "_format_activities",
+          "callee": "\"\\n\".join",
+          "lineNumber": 176
+        },
+        {
+          "caller": "_edit_query",
+          "callee": "query.edit_message_text",
+          "lineNumber": 183
+        },
+        {
+          "caller": "_edit_query",
+          "callee": "str(exc).lower",
+          "lineNumber": 190
+        },
+        {
+          "caller": "_edit_query",
+          "callee": "str",
+          "lineNumber": 190
+        },
+        {
+          "caller": "_respond",
+          "callee": "_edit_query",
+          "lineNumber": 198
+        },
+        {
+          "caller": "_respond",
+          "callee": "update.effective_message.reply_text",
+          "lineNumber": 200
+        },
+        {
+          "caller": "_send_error",
+          "callee": "detail.replace",
+          "lineNumber": 211
+        },
+        {
+          "caller": "_send_error",
+          "callee": "_respond",
+          "lineNumber": 212
+        },
+        {
+          "caller": "_send_error",
+          "callee": "_escape",
+          "lineNumber": 214
+        },
+        {
+          "caller": "_send_error",
+          "callee": "_home_markup",
+          "lineNumber": 215
+        },
+        {
+          "caller": "_show_home",
+          "callee": "_harness",
+          "lineNumber": 225
+        },
+        {
+          "caller": "_show_home",
+          "callee": "harness.state_for",
+          "lineNumber": 226
+        },
+        {
+          "caller": "_show_home",
+          "callee": "harness.active_descriptor",
+          "lineNumber": 227
+        },
+        {
+          "caller": "_show_home",
+          "callee": "_escape",
+          "lineNumber": 232
+        },
+        {
+          "caller": "_show_home",
+          "callee": "_escape",
+          "lineNumber": 233
+        },
+        {
+          "caller": "_show_home",
+          "callee": "_escape",
+          "lineNumber": 234
+        },
+        {
+          "caller": "_show_home",
+          "callee": "_respond",
+          "lineNumber": 238
+        },
+        {
+          "caller": "_show_home",
+          "callee": "_home_markup",
+          "lineNumber": 238
+        },
+        {
+          "caller": "start_command",
+          "callee": "_show_home",
+          "lineNumber": 244
+        },
+        {
+          "caller": "help_command",
+          "callee": "_respond",
+          "lineNumber": 264
+        },
+        {
+          "caller": "help_command",
+          "callee": "_home_markup",
+          "lineNumber": 264
+        },
+        {
+          "caller": "agents_command",
+          "callee": "_harness",
+          "lineNumber": 273
+        },
+        {
+          "caller": "agents_command",
+          "callee": "harness.active_descriptor",
+          "lineNumber": 274
+        },
+        {
+          "caller": "agents_command",
+          "callee": "_escape",
+          "lineNumber": 275
+        },
+        {
+          "caller": "agents_command",
+          "callee": "harness.registry.descriptors",
+          "lineNumber": 276
+        },
+        {
+          "caller": "agents_command",
+          "callee": "\", \".join",
+          "lineNumber": 277
+        },
+        {
+          "caller": "agents_command",
+          "callee": "lines.append",
+          "lineNumber": 278
+        },
+        {
+          "caller": "agents_command",
+          "callee": "_escape",
+          "lineNumber": 278
+        },
+        {
+          "caller": "agents_command",
+          "callee": "_escape",
+          "lineNumber": 278
+        },
+        {
+          "caller": "agents_command",
+          "callee": "_escape",
+          "lineNumber": 278
+        },
+        {
+          "caller": "agents_command",
+          "callee": "_respond",
+          "lineNumber": 279
+        },
+        {
+          "caller": "agents_command",
+          "callee": "\"\\n\".join",
+          "lineNumber": 279
+        },
+        {
+          "caller": "agents_command",
+          "callee": "_agent_markup",
+          "lineNumber": 279
+        },
+        {
+          "caller": "agents_command",
+          "callee": "harness.state_for",
+          "lineNumber": 279
+        },
+        {
+          "caller": "sources_command",
+          "callee": "_harness",
+          "lineNumber": 288
+        },
+        {
+          "caller": "sources_command",
+          "callee": "harness.list_sources",
+          "lineNumber": 290
+        },
+        {
+          "caller": "sources_command",
+          "callee": "_send_error",
+          "lineNumber": 292
+        },
+        {
+          "caller": "sources_command",
+          "callee": "harness.state_for",
+          "lineNumber": 294
+        },
+        {
+          "caller": "sources_command",
+          "callee": "str",
+          "lineNumber": 295
+        },
+        {
+          "caller": "sources_command",
+          "callee": "enumerate",
+          "lineNumber": 295
+        },
+        {
+          "caller": "sources_command",
+          "callee": "_home_markup",
+          "lineNumber": 298
+        },
+        {
+          "caller": "sources_command",
+          "callee": "InlineKeyboardButton",
+          "lineNumber": 301
+        },
+        {
+          "caller": "sources_command",
+          "callee": "state.source_options.items",
+          "lineNumber": 301
+        },
+        {
+          "caller": "sources_command",
+          "callee": "buttons.append",
+          "lineNumber": 302
+        },
+        {
+          "caller": "sources_command",
+          "callee": "InlineKeyboardButton",
+          "lineNumber": 302
+        },
+        {
+          "caller": "sources_command",
+          "callee": "InlineKeyboardMarkup",
+          "lineNumber": 303
+        },
+        {
+          "caller": "sources_command",
+          "callee": "_respond",
+          "lineNumber": 304
+        },
+        {
+          "caller": "session_command",
+          "callee": "_harness",
+          "lineNumber": 313
+        },
+        {
+          "caller": "session_command",
+          "callee": "harness.state_for",
+          "lineNumber": 314
+        },
+        {
+          "caller": "session_command",
+          "callee": "_respond",
+          "lineNumber": 316
+        },
+        {
+          "caller": "session_command",
+          "callee": "_home_markup",
+          "lineNumber": 316
+        },
+        {
+          "caller": "session_command",
+          "callee": "harness.get_session",
+          "lineNumber": 319
+        },
+        {
+          "caller": "session_command",
+          "callee": "_send_error",
+          "lineNumber": 321
+        },
+        {
+          "caller": "session_command",
+          "callee": "harness.active_descriptor",
+          "lineNumber": 323
+        },
+        {
+          "caller": "session_command",
+          "callee": "_respond",
+          "lineNumber": 324
+        },
+        {
+          "caller": "session_command",
+          "callee": "_format_session",
+          "lineNumber": 324
+        },
+        {
+          "caller": "session_command",
+          "callee": "_session_markup",
+          "lineNumber": 324
+        },
+        {
+          "caller": "activities_command",
+          "callee": "_harness",
+          "lineNumber": 333
+        },
+        {
+          "caller": "activities_command",
+          "callee": "harness.state_for",
+          "lineNumber": 334
+        },
+        {
+          "caller": "activities_command",
+          "callee": "_respond",
+          "lineNumber": 336
+        },
+        {
+          "caller": "activities_command",
+          "callee": "_home_markup",
+          "lineNumber": 336
+        },
+        {
+          "caller": "activities_command",
+          "callee": "harness.list_activities",
+          "lineNumber": 339
+        },
+        {
+          "caller": "activities_command",
+          "callee": "_send_error",
+          "lineNumber": 341
+        },
+        {
+          "caller": "activities_command",
+          "callee": "harness.active_descriptor",
+          "lineNumber": 343
+        },
+        {
+          "caller": "activities_command",
+          "callee": "_respond",
+          "lineNumber": 344
+        },
+        {
+          "caller": "activities_command",
+          "callee": "_format_activities",
+          "lineNumber": 346
+        },
+        {
+          "caller": "activities_command",
+          "callee": "InlineKeyboardMarkup",
+          "lineNumber": 347
+        },
+        {
+          "caller": "activities_command",
+          "callee": "InlineKeyboardButton",
+          "lineNumber": 349
+        },
+        {
+          "caller": "activities_command",
+          "callee": "InlineKeyboardButton",
+          "lineNumber": 350
+        },
+        {
+          "caller": "sessions_command",
+          "callee": "_harness",
+          "lineNumber": 362
+        },
+        {
+          "caller": "sessions_command",
+          "callee": "harness.list_sessions",
+          "lineNumber": 364
+        },
+        {
+          "caller": "sessions_command",
+          "callee": "_send_error",
+          "lineNumber": 366
+        },
+        {
+          "caller": "sessions_command",
+          "callee": "harness.state_for",
+          "lineNumber": 368
+        },
+        {
+          "caller": "sessions_command",
+          "callee": "str",
+          "lineNumber": 369
+        },
+        {
+          "caller": "sessions_command",
+          "callee": "enumerate",
+          "lineNumber": 369
+        },
+        {
+          "caller": "sessions_command",
+          "callee": "_respond",
+          "lineNumber": 371
+        },
+        {
+          "caller": "sessions_command",
+          "callee": "_home_markup",
+          "lineNumber": 371
+        },
+        {
+          "caller": "sessions_command",
+          "callee": "enumerate",
+          "lineNumber": 375
+        },
+        {
+          "caller": "sessions_command",
+          "callee": "lines.append",
+          "lineNumber": 377
+        },
+        {
+          "caller": "sessions_command",
+          "callee": "_escape",
+          "lineNumber": 377
+        },
+        {
+          "caller": "sessions_command",
+          "callee": "_escape",
+          "lineNumber": 377
+        },
+        {
+          "caller": "sessions_command",
+          "callee": "buttons.append",
+          "lineNumber": 378
+        },
+        {
+          "caller": "sessions_command",
+          "callee": "InlineKeyboardButton",
+          "lineNumber": 378
+        },
+        {
+          "caller": "sessions_command",
+          "callee": "buttons.append",
+          "lineNumber": 379
+        },
+        {
+          "caller": "sessions_command",
+          "callee": "InlineKeyboardButton",
+          "lineNumber": 379
+        },
+        {
+          "caller": "sessions_command",
+          "callee": "_respond",
+          "lineNumber": 380
+        },
+        {
+          "caller": "sessions_command",
+          "callee": "\"\\n\".join",
+          "lineNumber": 380
+        },
+        {
+          "caller": "sessions_command",
+          "callee": "InlineKeyboardMarkup",
+          "lineNumber": 380
+        },
+        {
+          "caller": "new_session_command",
+          "callee": "_respond",
+          "lineNumber": 386
+        },
+        {
+          "caller": "new_session_command",
+          "callee": "InlineKeyboardMarkup",
+          "lineNumber": 389
+        },
+        {
+          "caller": "new_session_command",
+          "callee": "InlineKeyboardButton",
+          "lineNumber": 390
+        },
+        {
+          "caller": "new_session_command",
+          "callee": "InlineKeyboardButton",
+          "lineNumber": 390
+        },
+        {
+          "caller": "message_handler",
+          "callee": "message.text.strip",
+          "lineNumber": 402
+        },
+        {
+          "caller": "message_handler",
+          "callee": "message.reply_text",
+          "lineNumber": 404
+        },
+        {
+          "caller": "message_handler",
+          "callee": "_harness",
+          "lineNumber": 406
+        },
+        {
+          "caller": "message_handler",
+          "callee": "context.bot.send_chat_action",
+          "lineNumber": 407
+        },
+        {
+          "caller": "message_handler",
+          "callee": "harness.ask",
+          "lineNumber": 409
+        },
+        {
+          "caller": "message_handler",
+          "callee": "LOGGER.warning",
+          "lineNumber": 411
+        },
+        {
+          "caller": "message_handler",
+          "callee": "message.reply_text",
+          "lineNumber": 412
+        },
+        {
+          "caller": "message_handler",
+          "callee": "LOGGER.exception",
+          "lineNumber": 415
+        },
+        {
+          "caller": "message_handler",
+          "callee": "message.reply_text",
+          "lineNumber": 416
+        },
+        {
+          "caller": "message_handler",
+          "callee": "_reply_in_chunks",
+          "lineNumber": 418
+        },
+        {
+          "caller": "message_handler",
+          "callee": "_home_markup",
+          "lineNumber": 418
+        },
+        {
+          "caller": "callback_handler",
+          "callee": "query.answer",
+          "lineNumber": 427
+        },
+        {
+          "caller": "callback_handler",
+          "callee": "_show_home",
+          "lineNumber": 431
+        },
+        {
+          "caller": "callback_handler",
+          "callee": "help_command",
+          "lineNumber": 433
+        },
+        {
+          "caller": "callback_handler",
+          "callee": "agents_command",
+          "lineNumber": 435
+        },
+        {
+          "caller": "callback_handler",
+          "callee": "data.startswith",
+          "lineNumber": 436
+        },
+        {
+          "caller": "callback_handler",
+          "callee": "_select_agent",
+          "lineNumber": 437
+        },
+        {
+          "caller": "callback_handler",
+          "callee": "data.rsplit",
+          "lineNumber": 437
+        },
+        {
+          "caller": "callback_handler",
+          "callee": "sources_command",
+          "lineNumber": 439
+        },
+        {
+          "caller": "callback_handler",
+          "callee": "data.startswith",
+          "lineNumber": 440
+        },
+        {
+          "caller": "callback_handler",
+          "callee": "_select_source",
+          "lineNumber": 441
+        },
+        {
+          "caller": "callback_handler",
+          "callee": "data.rsplit",
+          "lineNumber": 441
+        },
+        {
+          "caller": "callback_handler",
+          "callee": "data.startswith",
+          "lineNumber": 442
+        },
+        {
+          "caller": "callback_handler",
+          "callee": "_select_branch",
+          "lineNumber": 443
+        },
+        {
+          "caller": "callback_handler",
+          "callee": "data.rsplit",
+          "lineNumber": 443
+        },
+        {
+          "caller": "callback_handler",
+          "callee": "session_command",
+          "lineNumber": 445
+        },
+        {
+          "caller": "callback_handler",
+          "callee": "activities_command",
+          "lineNumber": 447
+        },
+        {
+          "caller": "callback_handler",
+          "callee": "sessions_command",
+          "lineNumber": 449
+        },
+        {
+          "caller": "callback_handler",
+          "callee": "data.startswith",
+          "lineNumber": 450
+        },
+        {
+          "caller": "callback_handler",
+          "callee": "_open_session",
+          "lineNumber": 451
+        },
+        {
+          "caller": "callback_handler",
+          "callee": "data.rsplit",
+          "lineNumber": 451
+        },
+        {
+          "caller": "callback_handler",
+          "callee": "_confirm_approval",
+          "lineNumber": 453
+        },
+        {
+          "caller": "callback_handler",
+          "callee": "_approve_session",
+          "lineNumber": 455
+        },
+        {
+          "caller": "callback_handler",
+          "callee": "_confirm_end",
+          "lineNumber": 457
+        },
+        {
+          "caller": "callback_handler",
+          "callee": "_end_session",
+          "lineNumber": 459
+        },
+        {
+          "caller": "callback_handler",
+          "callee": "new_session_command",
+          "lineNumber": 461
+        },
+        {
+          "caller": "callback_handler",
+          "callee": "_harness(context).store.reset_session",
+          "lineNumber": 465
+        },
+        {
+          "caller": "callback_handler",
+          "callee": "_harness",
+          "lineNumber": 465
+        },
+        {
+          "caller": "callback_handler",
+          "callee": "_show_home",
+          "lineNumber": 466
+        },
+        {
+          "caller": "callback_handler",
+          "callee": "LOGGER.warning",
+          "lineNumber": 468
+        },
+        {
+          "caller": "callback_handler",
+          "callee": "query.answer",
+          "lineNumber": 469
+        },
+        {
+          "caller": "callback_handler",
+          "callee": "LOGGER.exception",
+          "lineNumber": 471
+        },
+        {
+          "caller": "callback_handler",
+          "callee": "query.answer",
+          "lineNumber": 472
+        },
+        {
+          "caller": "_select_agent",
+          "callee": "_harness",
+          "lineNumber": 482
+        },
+        {
+          "caller": "_select_agent",
+          "callee": "harness.state_for",
+          "lineNumber": 483
+        },
+        {
+          "caller": "_select_agent",
+          "callee": "state.agent_options.get",
+          "lineNumber": 484
+        },
+        {
+          "caller": "_select_agent",
+          "callee": "query.answer",
+          "lineNumber": 486
+        },
+        {
+          "caller": "_select_agent",
+          "callee": "harness.select_agent",
+          "lineNumber": 488
+        },
+        {
+          "caller": "_select_agent",
+          "callee": "_show_home",
+          "lineNumber": 489
+        },
+        {
+          "caller": "_select_agent",
+          "callee": "query.answer",
+          "lineNumber": 490
+        },
+        {
+          "caller": "_select_source",
+          "callee": "_harness(context).state_for",
+          "lineNumber": 500
+        },
+        {
+          "caller": "_select_source",
+          "callee": "_harness",
+          "lineNumber": 500
+        },
+        {
+          "caller": "_select_source",
+          "callee": "state.source_options.get",
+          "lineNumber": 501
+        },
+        {
+          "caller": "_select_source",
+          "callee": "query.answer",
+          "lineNumber": 503
+        },
+        {
+          "caller": "_select_source",
+          "callee": "list",
+          "lineNumber": 506
+        },
+        {
+          "caller": "_select_source",
+          "callee": "str",
+          "lineNumber": 507
+        },
+        {
+          "caller": "_select_source",
+          "callee": "enumerate",
+          "lineNumber": 507
+        },
+        {
+          "caller": "_select_source",
+          "callee": "InlineKeyboardButton",
+          "lineNumber": 508
+        },
+        {
+          "caller": "_select_source",
+          "callee": "state.branch_options.items",
+          "lineNumber": 508
+        },
+        {
+          "caller": "_select_source",
+          "callee": "buttons.append",
+          "lineNumber": 509
+        },
+        {
+          "caller": "_select_source",
+          "callee": "InlineKeyboardButton",
+          "lineNumber": 509
+        },
+        {
+          "caller": "_select_source",
+          "callee": "_edit_query",
+          "lineNumber": 510
+        },
+        {
+          "caller": "_select_source",
+          "callee": "_escape",
+          "lineNumber": 510
+        },
+        {
+          "caller": "_select_source",
+          "callee": "InlineKeyboardMarkup",
+          "lineNumber": 510
+        },
+        {
+          "caller": "_select_branch",
+          "callee": "_harness(context).state_for",
+          "lineNumber": 520
+        },
+        {
+          "caller": "_select_branch",
+          "callee": "_harness",
+          "lineNumber": 520
+        },
+        {
+          "caller": "_select_branch",
+          "callee": "state.branch_options.get",
+          "lineNumber": 521
+        },
+        {
+          "caller": "_select_branch",
+          "callee": "query.answer",
+          "lineNumber": 523
+        },
+        {
+          "caller": "_select_branch",
+          "callee": "_edit_query",
+          "lineNumber": 526
+        },
+        {
+          "caller": "_select_branch",
+          "callee": "_escape",
+          "lineNumber": 526
+        },
+        {
+          "caller": "_select_branch",
+          "callee": "_escape",
+          "lineNumber": 526
+        },
+        {
+          "caller": "_select_branch",
+          "callee": "_home_markup",
+          "lineNumber": 526
+        },
+        {
+          "caller": "_open_session",
+          "callee": "_harness(context).state_for",
+          "lineNumber": 535
+        },
+        {
+          "caller": "_open_session",
+          "callee": "_harness",
+          "lineNumber": 535
+        },
+        {
+          "caller": "_open_session",
+          "callee": "state.session_options.get",
+          "lineNumber": 536
+        },
+        {
+          "caller": "_open_session",
+          "callee": "_send_error",
+          "lineNumber": 538
+        },
+        {
+          "caller": "_open_session",
+          "callee": "session_command",
+          "lineNumber": 541
+        },
+        {
+          "caller": "_confirm_approval",
+          "callee": "_respond",
+          "lineNumber": 547
+        },
+        {
+          "caller": "_confirm_approval",
+          "callee": "InlineKeyboardMarkup",
+          "lineNumber": 547
+        },
+        {
+          "caller": "_confirm_approval",
+          "callee": "InlineKeyboardButton",
+          "lineNumber": 547
+        },
+        {
+          "caller": "_confirm_approval",
+          "callee": "InlineKeyboardButton",
+          "lineNumber": 547
+        },
+        {
+          "caller": "_approve_session",
+          "callee": "_harness(context).state_for",
+          "lineNumber": 556
+        },
+        {
+          "caller": "_approve_session",
+          "callee": "_harness",
+          "lineNumber": 556
+        },
+        {
+          "caller": "_approve_session",
+          "callee": "_send_error",
+          "lineNumber": 558
+        },
+        {
+          "caller": "_approve_session",
+          "callee": "_harness(context).approve_plan",
+          "lineNumber": 560
+        },
+        {
+          "caller": "_approve_session",
+          "callee": "_harness",
+          "lineNumber": 560
+        },
+        {
+          "caller": "_approve_session",
+          "callee": "session_command",
+          "lineNumber": 561
+        },
+        {
+          "caller": "_confirm_end",
+          "callee": "_respond",
+          "lineNumber": 567
+        },
+        {
+          "caller": "_confirm_end",
+          "callee": "InlineKeyboardMarkup",
+          "lineNumber": 567
+        },
+        {
+          "caller": "_confirm_end",
+          "callee": "InlineKeyboardButton",
+          "lineNumber": 567
+        },
+        {
+          "caller": "_confirm_end",
+          "callee": "InlineKeyboardButton",
+          "lineNumber": 567
+        },
+        {
+          "caller": "_end_session",
+          "callee": "_harness",
+          "lineNumber": 576
+        },
+        {
+          "caller": "_end_session",
+          "callee": "harness.state_for",
+          "lineNumber": 577
+        },
+        {
+          "caller": "_end_session",
+          "callee": "harness.delete_session",
+          "lineNumber": 579
+        },
+        {
+          "caller": "_end_session",
+          "callee": "harness.store.reset_session",
+          "lineNumber": 580
+        },
+        {
+          "caller": "_end_session",
+          "callee": "_show_home",
+          "lineNumber": 581
+        },
+        {
+          "caller": "_reply_in_chunks",
+          "callee": "text.strip",
+          "lineNumber": 587
+        },
+        {
+          "caller": "_reply_in_chunks",
+          "callee": "range",
+          "lineNumber": 588
+        },
+        {
+          "caller": "_reply_in_chunks",
+          "callee": "len",
+          "lineNumber": 588
+        },
+        {
+          "caller": "_reply_in_chunks",
+          "callee": "enumerate",
+          "lineNumber": 589
+        },
+        {
+          "caller": "_reply_in_chunks",
+          "callee": "message.reply_text",
+          "lineNumber": 590
+        },
+        {
+          "caller": "_reply_in_chunks",
+          "callee": "len",
+          "lineNumber": 590
+        },
+        {
+          "caller": "error_handler",
+          "callee": "LOGGER.error",
+          "lineNumber": 596
+        },
+        {
+          "caller": "error_handler",
+          "callee": "isinstance",
+          "lineNumber": 597
+        },
+        {
+          "caller": "error_handler",
+          "callee": "update.effective_message.reply_text",
+          "lineNumber": 599
+        },
+        {
+          "caller": "error_handler",
+          "callee": "LOGGER.exception",
+          "lineNumber": 601
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 32,
+        "functionCount": 32,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/infrastructure/__init__.py",
+      "language": "python",
+      "fileCategory": "code",
+      "totalLines": 5,
+      "nonEmptyLines": 3,
+      "metrics": {
+        "importCount": 1,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/infrastructure/agents/__init__.py",
+      "language": "python",
+      "fileCategory": "code",
+      "totalLines": 5,
+      "nonEmptyLines": 3,
+      "metrics": {
+        "importCount": 1,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/infrastructure/agents/jules_agent.py",
+      "language": "python",
+      "fileCategory": "code",
+      "totalLines": 161,
+      "nonEmptyLines": 130,
+      "functions": [
+        {
+          "name": "_source_view",
+          "startLine": 13,
+          "endLine": 22,
+          "params": [
+            "source"
+          ]
+        },
+        {
+          "name": "_session_view",
+          "startLine": 25,
+          "endLine": 39,
+          "params": [
+            "session"
+          ]
+        }
+      ],
+      "classes": [
+        {
+          "name": "JulesAgent",
+          "startLine": 42,
+          "endLine": 161,
+          "methods": [
+            "__init__",
+            "descriptor",
+            "ask",
+            "list_sources",
+            "get_session",
+            "list_activities",
+            "list_sessions",
+            "approve_plan",
+            "delete_session",
+            "close"
+          ],
+          "properties": []
+        }
+      ],
+      "exports": [
+        {
+          "name": "_source_view",
+          "line": 13,
+          "isDefault": false
+        },
+        {
+          "name": "_session_view",
+          "line": 25,
+          "isDefault": false
+        },
+        {
+          "name": "JulesAgent",
+          "line": 42,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "_source_view",
+          "callee": "AgentSource",
+          "lineNumber": 16
+        },
+        {
+          "caller": "_source_view",
+          "callee": "tuple",
+          "lineNumber": 20
+        },
+        {
+          "caller": "_session_view",
+          "callee": "AgentSession",
+          "lineNumber": 28
+        },
+        {
+          "caller": "__init__",
+          "callee": "AgentDescriptor",
+          "lineNumber": 55
+        },
+        {
+          "caller": "ask",
+          "callee": "self.client.continue_session",
+          "lineNumber": 74
+        },
+        {
+          "caller": "ask",
+          "callee": "AgentReply",
+          "lineNumber": 75
+        },
+        {
+          "caller": "ask",
+          "callee": "AgentReply",
+          "lineNumber": 77
+        },
+        {
+          "caller": "ask",
+          "callee": "self._state_saver",
+          "lineNumber": 90
+        },
+        {
+          "caller": "ask",
+          "callee": "self.client.create_session",
+          "lineNumber": 94
+        },
+        {
+          "caller": "ask",
+          "callee": "self._state_saver",
+          "lineNumber": 106
+        },
+        {
+          "caller": "ask",
+          "callee": "self.client.wait_for_agent_reply",
+          "lineNumber": 108
+        },
+        {
+          "caller": "ask",
+          "callee": "AgentReply",
+          "lineNumber": 110
+        },
+        {
+          "caller": "ask",
+          "callee": "_session_view",
+          "lineNumber": 115
+        },
+        {
+          "caller": "ask",
+          "callee": "AgentReply",
+          "lineNumber": 119
+        },
+        {
+          "caller": "ask",
+          "callee": "_session_view",
+          "lineNumber": 119
+        },
+        {
+          "caller": "list_sources",
+          "callee": "_source_view",
+          "lineNumber": 124
+        },
+        {
+          "caller": "list_sources",
+          "callee": "self.client.list_sources",
+          "lineNumber": 124
+        },
+        {
+          "caller": "get_session",
+          "callee": "_session_view",
+          "lineNumber": 129
+        },
+        {
+          "caller": "get_session",
+          "callee": "self.client.get_session",
+          "lineNumber": 129
+        },
+        {
+          "caller": "list_activities",
+          "callee": "self.client.describe_activity",
+          "lineNumber": 135
+        },
+        {
+          "caller": "list_activities",
+          "callee": "self.client.list_activities",
+          "lineNumber": 136
+        },
+        {
+          "caller": "list_sessions",
+          "callee": "_session_view",
+          "lineNumber": 142
+        },
+        {
+          "caller": "list_sessions",
+          "callee": "self.client.list_sessions",
+          "lineNumber": 142
+        },
+        {
+          "caller": "approve_plan",
+          "callee": "self.client.approve_plan",
+          "lineNumber": 147
+        },
+        {
+          "caller": "delete_session",
+          "callee": "self.client.delete_session",
+          "lineNumber": 153
+        },
+        {
+          "caller": "close",
+          "callee": "self.client.close",
+          "lineNumber": 161
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 3,
+        "functionCount": 2,
+        "classCount": 1
+      }
+    },
+    {
+      "path": "src/infrastructure/local_store.py",
+      "language": "python",
+      "fileCategory": "code",
+      "totalLines": 243,
+      "nonEmptyLines": 201,
+      "functions": [
+        {
+          "name": "_source_to_payload",
+          "startLine": 20,
+          "endLine": 31,
+          "params": [
+            "source"
+          ]
+        },
+        {
+          "name": "_source_from_payload",
+          "startLine": 34,
+          "endLine": 45,
+          "params": [
+            "payload"
+          ]
+        },
+        {
+          "name": "_state_to_payload",
+          "startLine": 48,
+          "endLine": 60,
+          "params": [
+            "state"
+          ]
+        },
+        {
+          "name": "_state_from_payload",
+          "startLine": 63,
+          "endLine": 79,
+          "params": [
+            "payload",
+            "default_agent_id"
+          ]
+        }
+      ],
+      "classes": [
+        {
+          "name": "JsonChatStateStore",
+          "startLine": 82,
+          "endLine": 148,
+          "methods": [
+            "__init__",
+            "_load",
+            "_persist",
+            "state_for",
+            "lock_for",
+            "reset_session",
+            "save"
+          ],
+          "properties": []
+        },
+        {
+          "name": "LocalEventStore",
+          "startLine": 151,
+          "endLine": 243,
+          "methods": [
+            "__init__",
+            "_paths",
+            "record",
+            "_append_sync",
+            "recent",
+            "_recent_sync",
+            "summary"
+          ],
+          "properties": []
+        }
+      ],
+      "exports": [
+        {
+          "name": "_source_to_payload",
+          "line": 20,
+          "isDefault": false
+        },
+        {
+          "name": "_source_from_payload",
+          "line": 34,
+          "isDefault": false
+        },
+        {
+          "name": "_state_to_payload",
+          "line": 48,
+          "isDefault": false
+        },
+        {
+          "name": "_state_from_payload",
+          "line": 63,
+          "isDefault": false
+        },
+        {
+          "name": "JsonChatStateStore",
+          "line": 82,
+          "isDefault": false
+        },
+        {
+          "name": "LocalEventStore",
+          "line": 151,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "_source_to_payload",
+          "callee": "list",
+          "lineNumber": 29
+        },
+        {
+          "caller": "_source_from_payload",
+          "callee": "AgentSource",
+          "lineNumber": 39
+        },
+        {
+          "caller": "_source_from_payload",
+          "callee": "str",
+          "lineNumber": 40
+        },
+        {
+          "caller": "_source_from_payload",
+          "callee": "str",
+          "lineNumber": 41
+        },
+        {
+          "caller": "_source_from_payload",
+          "callee": "payload.get",
+          "lineNumber": 41
+        },
+        {
+          "caller": "_source_from_payload",
+          "callee": "payload.get",
+          "lineNumber": 42
+        },
+        {
+          "caller": "_source_from_payload",
+          "callee": "tuple",
+          "lineNumber": 43
+        },
+        {
+          "caller": "_source_from_payload",
+          "callee": "payload.get",
+          "lineNumber": 43
+        },
+        {
+          "caller": "_source_from_payload",
+          "callee": "dict",
+          "lineNumber": 44
+        },
+        {
+          "caller": "_source_from_payload",
+          "callee": "payload.get",
+          "lineNumber": 44
+        },
+        {
+          "caller": "_state_to_payload",
+          "callee": "_source_to_payload",
+          "lineNumber": 54
+        },
+        {
+          "caller": "_state_to_payload",
+          "callee": "_source_to_payload",
+          "lineNumber": 56
+        },
+        {
+          "caller": "_state_to_payload",
+          "callee": "state.source_options.items",
+          "lineNumber": 56
+        },
+        {
+          "caller": "_state_from_payload",
+          "callee": "ChatState",
+          "lineNumber": 66
+        },
+        {
+          "caller": "_state_from_payload",
+          "callee": "str",
+          "lineNumber": 67
+        },
+        {
+          "caller": "_state_from_payload",
+          "callee": "payload.get",
+          "lineNumber": 67
+        },
+        {
+          "caller": "_state_from_payload",
+          "callee": "payload.get",
+          "lineNumber": 68
+        },
+        {
+          "caller": "_state_from_payload",
+          "callee": "_source_from_payload",
+          "lineNumber": 69
+        },
+        {
+          "caller": "_state_from_payload",
+          "callee": "payload.get",
+          "lineNumber": 69
+        },
+        {
+          "caller": "_state_from_payload",
+          "callee": "payload.get",
+          "lineNumber": 70
+        },
+        {
+          "caller": "_state_from_payload",
+          "callee": "dict(payload.get(\"source_options\") or {}).items",
+          "lineNumber": 73
+        },
+        {
+          "caller": "_state_from_payload",
+          "callee": "dict",
+          "lineNumber": 73
+        },
+        {
+          "caller": "_state_from_payload",
+          "callee": "payload.get",
+          "lineNumber": 73
+        },
+        {
+          "caller": "_state_from_payload",
+          "callee": "_source_from_payload",
+          "lineNumber": 74
+        },
+        {
+          "caller": "_state_from_payload",
+          "callee": "str",
+          "lineNumber": 76
+        },
+        {
+          "caller": "_state_from_payload",
+          "callee": "str",
+          "lineNumber": 76
+        },
+        {
+          "caller": "_state_from_payload",
+          "callee": "dict(payload.get(\"branch_options\") or {}).items",
+          "lineNumber": 76
+        },
+        {
+          "caller": "_state_from_payload",
+          "callee": "dict",
+          "lineNumber": 76
+        },
+        {
+          "caller": "_state_from_payload",
+          "callee": "payload.get",
+          "lineNumber": 76
+        },
+        {
+          "caller": "_state_from_payload",
+          "callee": "str",
+          "lineNumber": 77
+        },
+        {
+          "caller": "_state_from_payload",
+          "callee": "str",
+          "lineNumber": 77
+        },
+        {
+          "caller": "_state_from_payload",
+          "callee": "dict(payload.get(\"session_options\") or {}).items",
+          "lineNumber": 77
+        },
+        {
+          "caller": "_state_from_payload",
+          "callee": "dict",
+          "lineNumber": 77
+        },
+        {
+          "caller": "_state_from_payload",
+          "callee": "payload.get",
+          "lineNumber": 77
+        },
+        {
+          "caller": "_state_from_payload",
+          "callee": "str",
+          "lineNumber": 78
+        },
+        {
+          "caller": "_state_from_payload",
+          "callee": "str",
+          "lineNumber": 78
+        },
+        {
+          "caller": "_state_from_payload",
+          "callee": "dict(payload.get(\"agent_options\") or {}).items",
+          "lineNumber": 78
+        },
+        {
+          "caller": "_state_from_payload",
+          "callee": "dict",
+          "lineNumber": 78
+        },
+        {
+          "caller": "_state_from_payload",
+          "callee": "payload.get",
+          "lineNumber": 78
+        },
+        {
+          "caller": "__init__",
+          "callee": "defaultdict",
+          "lineNumber": 89
+        },
+        {
+          "caller": "__init__",
+          "callee": "self._load",
+          "lineNumber": 90
+        },
+        {
+          "caller": "_load",
+          "callee": "self.path.exists",
+          "lineNumber": 95
+        },
+        {
+          "caller": "_load",
+          "callee": "json.loads",
+          "lineNumber": 98
+        },
+        {
+          "caller": "_load",
+          "callee": "self.path.read_text",
+          "lineNumber": 98
+        },
+        {
+          "caller": "_load",
+          "callee": "dict(payload).items",
+          "lineNumber": 99
+        },
+        {
+          "caller": "_load",
+          "callee": "dict",
+          "lineNumber": 99
+        },
+        {
+          "caller": "_load",
+          "callee": "_state_from_payload",
+          "lineNumber": 100
+        },
+        {
+          "caller": "_load",
+          "callee": "dict",
+          "lineNumber": 100
+        },
+        {
+          "caller": "_persist",
+          "callee": "self.path.parent.mkdir",
+          "lineNumber": 107
+        },
+        {
+          "caller": "_persist",
+          "callee": "str",
+          "lineNumber": 108
+        },
+        {
+          "caller": "_persist",
+          "callee": "_state_to_payload",
+          "lineNumber": 108
+        },
+        {
+          "caller": "_persist",
+          "callee": "self._states.items",
+          "lineNumber": 108
+        },
+        {
+          "caller": "_persist",
+          "callee": "tempfile.NamedTemporaryFile",
+          "lineNumber": 109
+        },
+        {
+          "caller": "_persist",
+          "callee": "json.dump",
+          "lineNumber": 112
+        },
+        {
+          "caller": "_persist",
+          "callee": "Path",
+          "lineNumber": 113
+        },
+        {
+          "caller": "_persist",
+          "callee": "os.replace",
+          "lineNumber": 114
+        },
+        {
+          "caller": "state_for",
+          "callee": "str",
+          "lineNumber": 119
+        },
+        {
+          "caller": "state_for",
+          "callee": "self._states.get",
+          "lineNumber": 120
+        },
+        {
+          "caller": "state_for",
+          "callee": "ChatState",
+          "lineNumber": 122
+        },
+        {
+          "caller": "state_for",
+          "callee": "self._persist",
+          "lineNumber": 124
+        },
+        {
+          "caller": "state_for",
+          "callee": "self._persist",
+          "lineNumber": 127
+        },
+        {
+          "caller": "lock_for",
+          "callee": "str",
+          "lineNumber": 133
+        },
+        {
+          "caller": "reset_session",
+          "callee": "self.state_for",
+          "lineNumber": 138
+        },
+        {
+          "caller": "reset_session",
+          "callee": "state.source_options.clear",
+          "lineNumber": 140
+        },
+        {
+          "caller": "reset_session",
+          "callee": "state.branch_options.clear",
+          "lineNumber": 141
+        },
+        {
+          "caller": "reset_session",
+          "callee": "state.session_options.clear",
+          "lineNumber": 142
+        },
+        {
+          "caller": "reset_session",
+          "callee": "self._persist",
+          "lineNumber": 143
+        },
+        {
+          "caller": "save",
+          "callee": "self._persist",
+          "lineNumber": 148
+        },
+        {
+          "caller": "__init__",
+          "callee": "asyncio.Lock",
+          "lineNumber": 156
+        },
+        {
+          "caller": "_paths",
+          "callee": "timestamp.date().isoformat",
+          "lineNumber": 159
+        },
+        {
+          "caller": "_paths",
+          "callee": "timestamp.date",
+          "lineNumber": 159
+        },
+        {
+          "caller": "record",
+          "callee": "datetime.now",
+          "lineNumber": 177
+        },
+        {
+          "caller": "record",
+          "callee": "uuid4",
+          "lineNumber": 179
+        },
+        {
+          "caller": "record",
+          "callee": "timestamp.isoformat",
+          "lineNumber": 180
+        },
+        {
+          "caller": "record",
+          "callee": "str",
+          "lineNumber": 182
+        },
+        {
+          "caller": "record",
+          "callee": "asyncio.to_thread",
+          "lineNumber": 189
+        },
+        {
+          "caller": "_append_sync",
+          "callee": "self._paths",
+          "lineNumber": 193
+        },
+        {
+          "caller": "_append_sync",
+          "callee": "jsonl_path.parent.mkdir",
+          "lineNumber": 194
+        },
+        {
+          "caller": "_append_sync",
+          "callee": "markdown_path.parent.mkdir",
+          "lineNumber": 195
+        },
+        {
+          "caller": "_append_sync",
+          "callee": "jsonl_path.open",
+          "lineNumber": 196
+        },
+        {
+          "caller": "_append_sync",
+          "callee": "handle.write",
+          "lineNumber": 197
+        },
+        {
+          "caller": "_append_sync",
+          "callee": "json.dumps",
+          "lineNumber": 197
+        },
+        {
+          "caller": "_append_sync",
+          "callee": "markdown_path.open",
+          "lineNumber": 198
+        },
+        {
+          "caller": "_append_sync",
+          "callee": "handle.write",
+          "lineNumber": 199
+        },
+        {
+          "caller": "_append_sync",
+          "callee": "json.dumps",
+          "lineNumber": 206
+        },
+        {
+          "caller": "recent",
+          "callee": "asyncio.to_thread",
+          "lineNumber": 213
+        },
+        {
+          "caller": "_recent_sync",
+          "callee": "events_dir.exists",
+          "lineNumber": 217
+        },
+        {
+          "caller": "_recent_sync",
+          "callee": "sorted",
+          "lineNumber": 220
+        },
+        {
+          "caller": "_recent_sync",
+          "callee": "events_dir.glob",
+          "lineNumber": 220
+        },
+        {
+          "caller": "_recent_sync",
+          "callee": "path.read_text(encoding=\"utf-8\").splitlines",
+          "lineNumber": 222
+        },
+        {
+          "caller": "_recent_sync",
+          "callee": "path.read_text",
+          "lineNumber": 222
+        },
+        {
+          "caller": "_recent_sync",
+          "callee": "reversed",
+          "lineNumber": 225
+        },
+        {
+          "caller": "_recent_sync",
+          "callee": "records.append",
+          "lineNumber": 227
+        },
+        {
+          "caller": "_recent_sync",
+          "callee": "json.loads",
+          "lineNumber": 227
+        },
+        {
+          "caller": "_recent_sync",
+          "callee": "len",
+          "lineNumber": 230
+        },
+        {
+          "caller": "summary",
+          "callee": "self.recent",
+          "lineNumber": 237
+        },
+        {
+          "caller": "summary",
+          "callee": "len",
+          "lineNumber": 239
+        },
+        {
+          "caller": "summary",
+          "callee": "sum",
+          "lineNumber": 240
+        },
+        {
+          "caller": "summary",
+          "callee": "event.get",
+          "lineNumber": 240
+        },
+        {
+          "caller": "summary",
+          "callee": "sum",
+          "lineNumber": 241
+        },
+        {
+          "caller": "summary",
+          "callee": "event.get(\"type\", \"\").endswith",
+          "lineNumber": 241
+        },
+        {
+          "caller": "summary",
+          "callee": "event.get",
+          "lineNumber": 241
+        },
+        {
+          "caller": "summary",
+          "callee": "len",
+          "lineNumber": 242
+        },
+        {
+          "caller": "summary",
+          "callee": "event.get",
+          "lineNumber": 242
+        },
+        {
+          "caller": "summary",
+          "callee": "event.get",
+          "lineNumber": 242
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 6,
+        "functionCount": 4,
+        "classCount": 2
+      }
+    },
+    {
+      "path": "src/main.py",
+      "language": "python",
+      "fileCategory": "code",
+      "totalLines": 138,
+      "nonEmptyLines": 111,
+      "functions": [
+        {
+          "name": "_close_client",
+          "startLine": 41,
+          "endLine": 50,
+          "params": [
+            "application"
+          ]
+        },
+        {
+          "name": "build_application",
+          "startLine": 53,
+          "endLine": 77,
+          "params": [
+            "settings"
+          ]
+        },
+        {
+          "name": "_webhook_url",
+          "startLine": 80,
+          "endLine": 86,
+          "params": [
+            "settings"
+          ]
+        },
+        {
+          "name": "run",
+          "startLine": 89,
+          "endLine": 113,
+          "params": [
+            "settings"
+          ]
+        },
+        {
+          "name": "main",
+          "startLine": 116,
+          "endLine": 134,
+          "params": []
+        }
+      ],
+      "exports": [
+        {
+          "name": "_close_client",
+          "line": 41,
+          "isDefault": false
+        },
+        {
+          "name": "build_application",
+          "line": 53,
+          "isDefault": false
+        },
+        {
+          "name": "_webhook_url",
+          "line": 80,
+          "isDefault": false
+        },
+        {
+          "name": "run",
+          "line": 89,
+          "isDefault": false
+        },
+        {
+          "name": "main",
+          "line": 116,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "_close_client",
+          "callee": "application.bot_data.get",
+          "lineNumber": 44
+        },
+        {
+          "caller": "_close_client",
+          "callee": "isinstance",
+          "lineNumber": 45
+        },
+        {
+          "caller": "_close_client",
+          "callee": "harness.close",
+          "lineNumber": 46
+        },
+        {
+          "caller": "_close_client",
+          "callee": "application.bot_data.get",
+          "lineNumber": 48
+        },
+        {
+          "caller": "_close_client",
+          "callee": "isinstance",
+          "lineNumber": 49
+        },
+        {
+          "caller": "_close_client",
+          "callee": "client.close",
+          "lineNumber": 50
+        },
+        {
+          "caller": "build_application",
+          "callee": "build_agent_harness",
+          "lineNumber": 56
+        },
+        {
+          "caller": "build_application",
+          "callee": "ApplicationBuilder()\n        .token(settings.telegram_bot_token)\n        .post_shutdown(_close_client)\n        .build",
+          "lineNumber": 58
+        },
+        {
+          "caller": "build_application",
+          "callee": "ApplicationBuilder()\n        .token(settings.telegram_bot_token)\n        .post_shutdown",
+          "lineNumber": 58
+        },
+        {
+          "caller": "build_application",
+          "callee": "ApplicationBuilder()\n        .token",
+          "lineNumber": 58
+        },
+        {
+          "caller": "build_application",
+          "callee": "ApplicationBuilder",
+          "lineNumber": 58
+        },
+        {
+          "caller": "build_application",
+          "callee": "application.add_handler",
+          "lineNumber": 66
+        },
+        {
+          "caller": "build_application",
+          "callee": "CommandHandler",
+          "lineNumber": 66
+        },
+        {
+          "caller": "build_application",
+          "callee": "application.add_handler",
+          "lineNumber": 67
+        },
+        {
+          "caller": "build_application",
+          "callee": "CommandHandler",
+          "lineNumber": 67
+        },
+        {
+          "caller": "build_application",
+          "callee": "application.add_handler",
+          "lineNumber": 68
+        },
+        {
+          "caller": "build_application",
+          "callee": "CommandHandler",
+          "lineNumber": 68
+        },
+        {
+          "caller": "build_application",
+          "callee": "application.add_handler",
+          "lineNumber": 69
+        },
+        {
+          "caller": "build_application",
+          "callee": "CommandHandler",
+          "lineNumber": 69
+        },
+        {
+          "caller": "build_application",
+          "callee": "application.add_handler",
+          "lineNumber": 70
+        },
+        {
+          "caller": "build_application",
+          "callee": "CommandHandler",
+          "lineNumber": 70
+        },
+        {
+          "caller": "build_application",
+          "callee": "application.add_handler",
+          "lineNumber": 71
+        },
+        {
+          "caller": "build_application",
+          "callee": "CommandHandler",
+          "lineNumber": 71
+        },
+        {
+          "caller": "build_application",
+          "callee": "application.add_handler",
+          "lineNumber": 72
+        },
+        {
+          "caller": "build_application",
+          "callee": "CommandHandler",
+          "lineNumber": 72
+        },
+        {
+          "caller": "build_application",
+          "callee": "application.add_handler",
+          "lineNumber": 73
+        },
+        {
+          "caller": "build_application",
+          "callee": "CommandHandler",
+          "lineNumber": 73
+        },
+        {
+          "caller": "build_application",
+          "callee": "application.add_handler",
+          "lineNumber": 74
+        },
+        {
+          "caller": "build_application",
+          "callee": "CallbackQueryHandler",
+          "lineNumber": 74
+        },
+        {
+          "caller": "build_application",
+          "callee": "application.add_handler",
+          "lineNumber": 75
+        },
+        {
+          "caller": "build_application",
+          "callee": "MessageHandler",
+          "lineNumber": 75
+        },
+        {
+          "caller": "build_application",
+          "callee": "application.add_error_handler",
+          "lineNumber": 76
+        },
+        {
+          "caller": "_webhook_url",
+          "callee": "settings.webhook_url.endswith",
+          "lineNumber": 84
+        },
+        {
+          "caller": "run",
+          "callee": "build_application",
+          "lineNumber": 92
+        },
+        {
+          "caller": "run",
+          "callee": "_webhook_url",
+          "lineNumber": 99
+        },
+        {
+          "caller": "run",
+          "callee": "LOGGER.info",
+          "lineNumber": 100
+        },
+        {
+          "caller": "run",
+          "callee": "LOGGER.info",
+          "lineNumber": 101
+        },
+        {
+          "caller": "run",
+          "callee": "application.run_webhook",
+          "lineNumber": 102
+        },
+        {
+          "caller": "run",
+          "callee": "WEBHOOK_PATH.lstrip",
+          "lineNumber": 105
+        },
+        {
+          "caller": "run",
+          "callee": "LOGGER.info",
+          "lineNumber": 112
+        },
+        {
+          "caller": "run",
+          "callee": "application.run_polling",
+          "lineNumber": 113
+        },
+        {
+          "caller": "main",
+          "callee": "get_settings",
+          "lineNumber": 120
+        },
+        {
+          "caller": "main",
+          "callee": "logging.basicConfig",
+          "lineNumber": 122
+        },
+        {
+          "caller": "main",
+          "callee": "LOGGER.error",
+          "lineNumber": 123
+        },
+        {
+          "caller": "main",
+          "callee": "sys.exit",
+          "lineNumber": 124
+        },
+        {
+          "caller": "main",
+          "callee": "logging.basicConfig",
+          "lineNumber": 126
+        },
+        {
+          "caller": "main",
+          "callee": "getattr",
+          "lineNumber": 127
+        },
+        {
+          "caller": "main",
+          "callee": "run",
+          "lineNumber": 131
+        },
+        {
+          "caller": "main",
+          "callee": "LOGGER.error",
+          "lineNumber": 133
+        },
+        {
+          "caller": "main",
+          "callee": "sys.exit",
+          "lineNumber": 134
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 5,
+        "functionCount": 5,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "tests/__init__.py",
+      "language": "python",
+      "fileCategory": "code",
+      "totalLines": 1,
+      "nonEmptyLines": 1,
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "tests/test_composition.py",
+      "language": "python",
+      "fileCategory": "code",
+      "totalLines": 45,
+      "nonEmptyLines": 36,
+      "classes": [
+        {
+          "name": "CompositionTests",
+          "startLine": 12,
+          "endLine": 41,
+          "methods": [
+            "test_application_registers_harness"
+          ],
+          "properties": []
+        }
+      ],
+      "exports": [
+        {
+          "name": "CompositionTests",
+          "line": 12,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "test_application_registers_harness",
+          "callee": "Settings",
+          "lineNumber": 16
+        },
+        {
+          "caller": "test_application_registers_harness",
+          "callee": "build_application",
+          "lineNumber": 37
+        },
+        {
+          "caller": "test_application_registers_harness",
+          "callee": "self.assertIsInstance",
+          "lineNumber": 39
+        },
+        {
+          "caller": "test_application_registers_harness",
+          "callee": "self.assertEqual",
+          "lineNumber": 40
+        },
+        {
+          "caller": "test_application_registers_harness",
+          "callee": "application.bot_data[\"agent_harness\"].active_descriptor",
+          "lineNumber": 40
+        },
+        {
+          "caller": "test_application_registers_harness",
+          "callee": "application.bot_data[\"agent_harness\"].close",
+          "lineNumber": 41
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 1,
+        "functionCount": 0,
+        "classCount": 1
+      }
+    },
+    {
+      "path": "tests/test_control_plane_api.py",
+      "language": "python",
+      "fileCategory": "code",
+      "totalLines": 184,
+      "nonEmptyLines": 154,
+      "functions": [
+        {
+          "name": "make_settings",
+          "startLine": 95,
+          "endLine": 118,
+          "params": []
+        }
+      ],
+      "classes": [
+        {
+          "name": "FakeAgent",
+          "startLine": 22,
+          "endLine": 92,
+          "methods": [
+            "ask",
+            "list_sources",
+            "get_session",
+            "list_activities",
+            "list_sessions",
+            "approve_plan",
+            "delete_session",
+            "close"
+          ],
+          "properties": []
+        },
+        {
+          "name": "ControlPlaneApiTests",
+          "startLine": 121,
+          "endLine": 180,
+          "methods": [
+            "test_dashboard_context_prompt_and_journal_workflow"
+          ],
+          "properties": []
+        }
+      ],
+      "exports": [
+        {
+          "name": "FakeAgent",
+          "line": 22,
+          "isDefault": false
+        },
+        {
+          "name": "make_settings",
+          "line": 95,
+          "isDefault": false
+        },
+        {
+          "name": "ControlPlaneApiTests",
+          "line": 121,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "ask",
+          "callee": "AgentReply",
+          "lineNumber": 35
+        },
+        {
+          "caller": "ask",
+          "callee": "AgentSession",
+          "lineNumber": 38
+        },
+        {
+          "caller": "list_sources",
+          "callee": "AgentSource",
+          "lineNumber": 50
+        },
+        {
+          "caller": "get_session",
+          "callee": "AgentSession",
+          "lineNumber": 59
+        },
+        {
+          "caller": "list_sessions",
+          "callee": "self.get_session",
+          "lineNumber": 83
+        },
+        {
+          "caller": "make_settings",
+          "callee": "Settings",
+          "lineNumber": 98
+        },
+        {
+          "caller": "test_dashboard_context_prompt_and_journal_workflow",
+          "callee": "tempfile.TemporaryDirectory",
+          "lineNumber": 127
+        },
+        {
+          "caller": "test_dashboard_context_prompt_and_journal_workflow",
+          "callee": "Path",
+          "lineNumber": 128
+        },
+        {
+          "caller": "test_dashboard_context_prompt_and_journal_workflow",
+          "callee": "JsonChatStateStore",
+          "lineNumber": 129
+        },
+        {
+          "caller": "test_dashboard_context_prompt_and_journal_workflow",
+          "callee": "AgentHarness",
+          "lineNumber": 130
+        },
+        {
+          "caller": "test_dashboard_context_prompt_and_journal_workflow",
+          "callee": "AgentRegistry",
+          "lineNumber": 130
+        },
+        {
+          "caller": "test_dashboard_context_prompt_and_journal_workflow",
+          "callee": "FakeAgent",
+          "lineNumber": 130
+        },
+        {
+          "caller": "test_dashboard_context_prompt_and_journal_workflow",
+          "callee": "LocalControlPlane",
+          "lineNumber": 131
+        },
+        {
+          "caller": "test_dashboard_context_prompt_and_journal_workflow",
+          "callee": "LocalEventStore",
+          "lineNumber": 131
+        },
+        {
+          "caller": "test_dashboard_context_prompt_and_journal_workflow",
+          "callee": "create_app",
+          "lineNumber": 132
+        },
+        {
+          "caller": "test_dashboard_context_prompt_and_journal_workflow",
+          "callee": "make_settings",
+          "lineNumber": 132
+        },
+        {
+          "caller": "test_dashboard_context_prompt_and_journal_workflow",
+          "callee": "TestClient",
+          "lineNumber": 133
+        },
+        {
+          "caller": "test_dashboard_context_prompt_and_journal_workflow",
+          "callee": "client.get(\"/api/dashboard\").json",
+          "lineNumber": 134
+        },
+        {
+          "caller": "test_dashboard_context_prompt_and_journal_workflow",
+          "callee": "client.get",
+          "lineNumber": 134
+        },
+        {
+          "caller": "test_dashboard_context_prompt_and_journal_workflow",
+          "callee": "self.assertEqual",
+          "lineNumber": 135
+        },
+        {
+          "caller": "test_dashboard_context_prompt_and_journal_workflow",
+          "callee": "client.put",
+          "lineNumber": 137
+        },
+        {
+          "caller": "test_dashboard_context_prompt_and_journal_workflow",
+          "callee": "self.assertEqual",
+          "lineNumber": 141
+        },
+        {
+          "caller": "test_dashboard_context_prompt_and_journal_workflow",
+          "callee": "client.post",
+          "lineNumber": 143
+        },
+        {
+          "caller": "test_dashboard_context_prompt_and_journal_workflow",
+          "callee": "self.assertEqual",
+          "lineNumber": 147
+        },
+        {
+          "caller": "test_dashboard_context_prompt_and_journal_workflow",
+          "callee": "self.assertTrue",
+          "lineNumber": 148
+        },
+        {
+          "caller": "test_dashboard_context_prompt_and_journal_workflow",
+          "callee": "reply.json",
+          "lineNumber": 148
+        },
+        {
+          "caller": "test_dashboard_context_prompt_and_journal_workflow",
+          "callee": "self.assertTrue",
+          "lineNumber": 149
+        },
+        {
+          "caller": "test_dashboard_context_prompt_and_journal_workflow",
+          "callee": "reply.json",
+          "lineNumber": 149
+        },
+        {
+          "caller": "test_dashboard_context_prompt_and_journal_workflow",
+          "callee": "range",
+          "lineNumber": 152
+        },
+        {
+          "caller": "test_dashboard_context_prompt_and_journal_workflow",
+          "callee": "client.get(\"/api/events?conversation_id=web:local\").json",
+          "lineNumber": 153
+        },
+        {
+          "caller": "test_dashboard_context_prompt_and_journal_workflow",
+          "callee": "client.get",
+          "lineNumber": 153
+        },
+        {
+          "caller": "test_dashboard_context_prompt_and_journal_workflow",
+          "callee": "any",
+          "lineNumber": 154
+        },
+        {
+          "caller": "test_dashboard_context_prompt_and_journal_workflow",
+          "callee": "time.sleep",
+          "lineNumber": 156
+        },
+        {
+          "caller": "test_dashboard_context_prompt_and_journal_workflow",
+          "callee": "self.assertIn",
+          "lineNumber": 158
+        },
+        {
+          "caller": "test_dashboard_context_prompt_and_journal_workflow",
+          "callee": "self.assertIn",
+          "lineNumber": 159
+        },
+        {
+          "caller": "test_dashboard_context_prompt_and_journal_workflow",
+          "callee": "next",
+          "lineNumber": 160
+        },
+        {
+          "caller": "test_dashboard_context_prompt_and_journal_workflow",
+          "callee": "self.assertEqual",
+          "lineNumber": 161
+        },
+        {
+          "caller": "test_dashboard_context_prompt_and_journal_workflow",
+          "callee": "self.assertEqual",
+          "lineNumber": 162
+        },
+        {
+          "caller": "test_dashboard_context_prompt_and_journal_workflow",
+          "callee": "reply.json",
+          "lineNumber": 162
+        },
+        {
+          "caller": "test_dashboard_context_prompt_and_journal_workflow",
+          "callee": "self.assertNotIn",
+          "lineNumber": 163
+        },
+        {
+          "caller": "test_dashboard_context_prompt_and_journal_workflow",
+          "callee": "quote",
+          "lineNumber": 165
+        },
+        {
+          "caller": "test_dashboard_context_prompt_and_journal_workflow",
+          "callee": "client.get",
+          "lineNumber": 166
+        },
+        {
+          "caller": "test_dashboard_context_prompt_and_journal_workflow",
+          "callee": "self.assertEqual",
+          "lineNumber": 167
+        },
+        {
+          "caller": "test_dashboard_context_prompt_and_journal_workflow",
+          "callee": "self.assertEqual",
+          "lineNumber": 168
+        },
+        {
+          "caller": "test_dashboard_context_prompt_and_journal_workflow",
+          "callee": "activities.json",
+          "lineNumber": 168
+        },
+        {
+          "caller": "test_dashboard_context_prompt_and_journal_workflow",
+          "callee": "client.post",
+          "lineNumber": 170
+        },
+        {
+          "caller": "test_dashboard_context_prompt_and_journal_workflow",
+          "callee": "self.assertEqual",
+          "lineNumber": 171
+        },
+        {
+          "caller": "test_dashboard_context_prompt_and_journal_workflow",
+          "callee": "client.post",
+          "lineNumber": 172
+        },
+        {
+          "caller": "test_dashboard_context_prompt_and_journal_workflow",
+          "callee": "self.assertEqual",
+          "lineNumber": 176
+        },
+        {
+          "caller": "test_dashboard_context_prompt_and_journal_workflow",
+          "callee": "self.assertEqual",
+          "lineNumber": 177
+        },
+        {
+          "caller": "test_dashboard_context_prompt_and_journal_workflow",
+          "callee": "attached.json",
+          "lineNumber": 177
+        },
+        {
+          "caller": "test_dashboard_context_prompt_and_journal_workflow",
+          "callee": "client.get(\"/api/events?conversation_id=web:other\").json",
+          "lineNumber": 179
+        },
+        {
+          "caller": "test_dashboard_context_prompt_and_journal_workflow",
+          "callee": "client.get",
+          "lineNumber": 179
+        },
+        {
+          "caller": "test_dashboard_context_prompt_and_journal_workflow",
+          "callee": "self.assertEqual",
+          "lineNumber": 180
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 3,
+        "functionCount": 1,
+        "classCount": 2
+      }
+    },
+    {
+      "path": "tests/test_harness.py",
+      "language": "python",
+      "fileCategory": "code",
+      "totalLines": 113,
+      "nonEmptyLines": 79,
+      "classes": [
+        {
+          "name": "FakeAgent",
+          "startLine": 13,
+          "endLine": 65,
+          "methods": [
+            "__init__",
+            "descriptor",
+            "ask",
+            "list_sources",
+            "get_session",
+            "list_activities",
+            "list_sessions",
+            "approve_plan",
+            "delete_session",
+            "close"
+          ],
+          "properties": []
+        },
+        {
+          "name": "HarnessTests",
+          "startLine": 68,
+          "endLine": 109,
+          "methods": [
+            "test_routes_to_default_agent_and_tracks_session",
+            "test_switching_agent_clears_provider_session",
+            "test_same_chat_requests_are_serialized"
+          ],
+          "properties": []
+        }
+      ],
+      "exports": [
+        {
+          "name": "FakeAgent",
+          "line": 13,
+          "isDefault": false
+        },
+        {
+          "name": "HarnessTests",
+          "line": 68,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "__init__",
+          "callee": "AgentDescriptor",
+          "lineNumber": 17
+        },
+        {
+          "caller": "__init__",
+          "callee": "agent_id.title",
+          "lineNumber": 19
+        },
+        {
+          "caller": "ask",
+          "callee": "self.prompts.append",
+          "lineNumber": 34
+        },
+        {
+          "caller": "ask",
+          "callee": "AgentReply",
+          "lineNumber": 36
+        },
+        {
+          "caller": "get_session",
+          "callee": "AgentSession",
+          "lineNumber": 46
+        },
+        {
+          "caller": "test_routes_to_default_agent_and_tracks_session",
+          "callee": "FakeAgent",
+          "lineNumber": 72
+        },
+        {
+          "caller": "test_routes_to_default_agent_and_tracks_session",
+          "callee": "FakeAgent",
+          "lineNumber": 73
+        },
+        {
+          "caller": "test_routes_to_default_agent_and_tracks_session",
+          "callee": "AgentHarness",
+          "lineNumber": 74
+        },
+        {
+          "caller": "test_routes_to_default_agent_and_tracks_session",
+          "callee": "AgentRegistry",
+          "lineNumber": 74
+        },
+        {
+          "caller": "test_routes_to_default_agent_and_tracks_session",
+          "callee": "harness.ask",
+          "lineNumber": 76
+        },
+        {
+          "caller": "test_routes_to_default_agent_and_tracks_session",
+          "callee": "self.assertEqual",
+          "lineNumber": 78
+        },
+        {
+          "caller": "test_routes_to_default_agent_and_tracks_session",
+          "callee": "self.assertEqual",
+          "lineNumber": 79
+        },
+        {
+          "caller": "test_routes_to_default_agent_and_tracks_session",
+          "callee": "harness.state_for",
+          "lineNumber": 79
+        },
+        {
+          "caller": "test_routes_to_default_agent_and_tracks_session",
+          "callee": "self.assertEqual",
+          "lineNumber": 80
+        },
+        {
+          "caller": "test_routes_to_default_agent_and_tracks_session",
+          "callee": "self.assertEqual",
+          "lineNumber": 81
+        },
+        {
+          "caller": "test_switching_agent_clears_provider_session",
+          "callee": "FakeAgent",
+          "lineNumber": 84
+        },
+        {
+          "caller": "test_switching_agent_clears_provider_session",
+          "callee": "FakeAgent",
+          "lineNumber": 85
+        },
+        {
+          "caller": "test_switching_agent_clears_provider_session",
+          "callee": "AgentHarness",
+          "lineNumber": 86
+        },
+        {
+          "caller": "test_switching_agent_clears_provider_session",
+          "callee": "AgentRegistry",
+          "lineNumber": 86
+        },
+        {
+          "caller": "test_switching_agent_clears_provider_session",
+          "callee": "harness.ask",
+          "lineNumber": 87
+        },
+        {
+          "caller": "test_switching_agent_clears_provider_session",
+          "callee": "harness.select_agent",
+          "lineNumber": 89
+        },
+        {
+          "caller": "test_switching_agent_clears_provider_session",
+          "callee": "harness.ask",
+          "lineNumber": 90
+        },
+        {
+          "caller": "test_switching_agent_clears_provider_session",
+          "callee": "self.assertEqual",
+          "lineNumber": 92
+        },
+        {
+          "caller": "test_switching_agent_clears_provider_session",
+          "callee": "self.assertEqual",
+          "lineNumber": 93
+        },
+        {
+          "caller": "test_switching_agent_clears_provider_session",
+          "callee": "self.assertEqual",
+          "lineNumber": 94
+        },
+        {
+          "caller": "test_switching_agent_clears_provider_session",
+          "callee": "harness.state_for",
+          "lineNumber": 94
+        },
+        {
+          "caller": "test_switching_agent_clears_provider_session",
+          "callee": "self.assertEqual",
+          "lineNumber": 95
+        },
+        {
+          "caller": "test_switching_agent_clears_provider_session",
+          "callee": "harness.state_for",
+          "lineNumber": 95
+        },
+        {
+          "caller": "test_same_chat_requests_are_serialized",
+          "callee": "FakeAgent",
+          "lineNumber": 97
+        },
+        {
+          "caller": "test_same_chat_requests_are_serialized",
+          "callee": "AgentHarness",
+          "lineNumber": 98
+        },
+        {
+          "caller": "test_same_chat_requests_are_serialized",
+          "callee": "AgentRegistry",
+          "lineNumber": 98
+        },
+        {
+          "caller": "run",
+          "callee": "harness.store.lock_for",
+          "lineNumber": 102
+        },
+        {
+          "caller": "run",
+          "callee": "order.append",
+          "lineNumber": 103
+        },
+        {
+          "caller": "run",
+          "callee": "asyncio.sleep",
+          "lineNumber": 104
+        },
+        {
+          "caller": "run",
+          "callee": "order.append",
+          "lineNumber": 105
+        },
+        {
+          "caller": "test_same_chat_requests_are_serialized",
+          "callee": "asyncio.gather",
+          "lineNumber": 107
+        },
+        {
+          "caller": "test_same_chat_requests_are_serialized",
+          "callee": "run",
+          "lineNumber": 107
+        },
+        {
+          "caller": "test_same_chat_requests_are_serialized",
+          "callee": "run",
+          "lineNumber": 107
+        },
+        {
+          "caller": "test_same_chat_requests_are_serialized",
+          "callee": "self.assertEqual",
+          "lineNumber": 109
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 2,
+        "functionCount": 0,
+        "classCount": 2
+      }
+    },
+    {
+      "path": "tests/test_jules_activity_summary.py",
+      "language": "python",
+      "fileCategory": "code",
+      "totalLines": 48,
+      "nonEmptyLines": 38,
+      "classes": [
+        {
+          "name": "JulesActivitySummaryTests",
+          "startLine": 10,
+          "endLine": 44,
+          "methods": [
+            "test_describes_plan_steps_progress_and_changed_files"
+          ],
+          "properties": []
+        }
+      ],
+      "exports": [
+        {
+          "name": "JulesActivitySummaryTests",
+          "line": 10,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "test_describes_plan_steps_progress_and_changed_files",
+          "callee": "JulesClient.describe_activity",
+          "lineNumber": 16
+        },
+        {
+          "caller": "test_describes_plan_steps_progress_and_changed_files",
+          "callee": "JulesClient.describe_activity",
+          "lineNumber": 22
+        },
+        {
+          "caller": "test_describes_plan_steps_progress_and_changed_files",
+          "callee": "JulesClient.describe_activity",
+          "lineNumber": 28
+        },
+        {
+          "caller": "test_describes_plan_steps_progress_and_changed_files",
+          "callee": "self.assertEqual",
+          "lineNumber": 39
+        },
+        {
+          "caller": "test_describes_plan_steps_progress_and_changed_files",
+          "callee": "self.assertEqual",
+          "lineNumber": 40
+        },
+        {
+          "caller": "test_describes_plan_steps_progress_and_changed_files",
+          "callee": "self.assertEqual",
+          "lineNumber": 41
+        },
+        {
+          "caller": "test_describes_plan_steps_progress_and_changed_files",
+          "callee": "self.assertEqual",
+          "lineNumber": 42
+        },
+        {
+          "caller": "test_describes_plan_steps_progress_and_changed_files",
+          "callee": "self.assertEqual",
+          "lineNumber": 43
+        },
+        {
+          "caller": "test_describes_plan_steps_progress_and_changed_files",
+          "callee": "self.assertEqual",
+          "lineNumber": 44
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 1,
+        "functionCount": 0,
+        "classCount": 1
+      }
+    }
+  ]
+}
