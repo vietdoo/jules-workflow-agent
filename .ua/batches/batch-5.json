@@ -1,0 +1,89 @@
+{
+  "projectRoot": "/app",
+  "batchFiles": [
+    {
+      "path": "src/domain/__init__.py",
+      "language": "python",
+      "sizeLines": 12,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/domain/agent.py",
+      "language": "python",
+      "sizeLines": 98,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/handlers/__init__.py",
+      "language": "python",
+      "sizeLines": 29,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/handlers/message_handlers.py",
+      "language": "python",
+      "sizeLines": 601,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/infrastructure/__init__.py",
+      "language": "python",
+      "sizeLines": 5,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/infrastructure/agents/__init__.py",
+      "language": "python",
+      "sizeLines": 5,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/infrastructure/agents/jules_agent.py",
+      "language": "python",
+      "sizeLines": 161,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/infrastructure/local_store.py",
+      "language": "python",
+      "sizeLines": 243,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/main.py",
+      "language": "python",
+      "sizeLines": 138,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/__init__.py",
+      "language": "python",
+      "sizeLines": 1,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/test_composition.py",
+      "language": "python",
+      "sizeLines": 45,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/test_control_plane_api.py",
+      "language": "python",
+      "sizeLines": 184,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/test_harness.py",
+      "language": "python",
+      "sizeLines": 113,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/test_jules_activity_summary.py",
+      "language": "python",
+      "sizeLines": 48,
+      "fileCategory": "code"
+    }
+  ]
+}

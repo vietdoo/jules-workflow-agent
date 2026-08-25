@@ -1,0 +1,23 @@
+{
+  "projectRoot": "/app",
+  "batchFiles": [
+    {
+      "path": "apps/web/package.json",
+      "language": "json",
+      "sizeLines": 23,
+      "fileCategory": "config"
+    },
+    {
+      "path": "apps/web/pnpm-workspace.yaml",
+      "language": "yaml",
+      "sizeLines": 2,
+      "fileCategory": "config"
+    },
+    {
+      "path": "apps/web/tsconfig.json",
+      "language": "json",
+      "sizeLines": 36,
+      "fileCategory": "config"
+    }
+  ]
+}

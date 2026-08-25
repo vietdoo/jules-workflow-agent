@@ -1,0 +1,116 @@
+{
+  "scriptCompleted": true,
+  "filesAnalyzed": 3,
+  "filesSkipped": [],
+  "analysisOutcomes": {
+    "structure": {
+      "succeeded": 3,
+      "failed": 0
+    },
+    "callGraph": {
+      "succeeded": 0,
+      "failed": 0,
+      "skipped": 3
+    }
+  },
+  "results": [
+    {
+      "path": "apps/web/package.json",
+      "language": "json",
+      "fileCategory": "config",
+      "totalLines": 23,
+      "nonEmptyLines": 23,
+      "sections": [
+        {
+          "heading": "name",
+          "level": 1,
+          "line": 2
+        },
+        {
+          "heading": "private",
+          "level": 1,
+          "line": 3
+        },
+        {
+          "heading": "version",
+          "level": 1,
+          "line": 4
+        },
+        {
+          "heading": "scripts",
+          "level": 1,
+          "line": 5
+        },
+        {
+          "heading": "dependencies",
+          "level": 1,
+          "line": 11
+        },
+        {
+          "heading": "devDependencies",
+          "level": 1,
+          "line": 17
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 6
+      }
+    },
+    {
+      "path": "apps/web/pnpm-workspace.yaml",
+      "language": "yaml",
+      "fileCategory": "config",
+      "totalLines": 2,
+      "nonEmptyLines": 2,
+      "sections": [
+        {
+          "heading": "allowBuilds",
+          "level": 1,
+          "line": 1
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 1
+      }
+    },
+    {
+      "path": "apps/web/tsconfig.json",
+      "language": "json",
+      "fileCategory": "config",
+      "totalLines": 36,
+      "nonEmptyLines": 36,
+      "sections": [
+        {
+          "heading": "compilerOptions",
+          "level": 1,
+          "line": 2
+        },
+        {
+          "heading": "include",
+          "level": 1,
+          "line": 26
+        },
+        {
+          "heading": "exclude",
+          "level": 1,
+          "line": 33
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 3
+      }
+    }
+  ]
+}

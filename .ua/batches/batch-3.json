@@ -1,0 +1,23 @@
+{
+  "projectRoot": "/app",
+  "batchFiles": [
+    {
+      "path": "docs/JULES_API_REFERENCE_NOTES.md",
+      "language": "markdown",
+      "sizeLines": 13,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/SHOWCASE_CAPTURE_NOTES.md",
+      "language": "markdown",
+      "sizeLines": 11,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/VERIFICATION.md",
+      "language": "markdown",
+      "sizeLines": 35,
+      "fileCategory": "docs"
+    }
+  ]
+}

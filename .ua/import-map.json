@@ -1,0 +1,141 @@
+{
+  "scriptCompleted": true,
+  "stats": {
+    "filesScanned": 56,
+    "filesWithImports": 24,
+    "totalEdges": 51
+  },
+  "importMap": {
+    ".env.example": [],
+    ".gitmodules": [],
+    "ARCHITECTURE.md": [],
+    "CODE_OF_CONDUCT.md": [],
+    "CONTRIBUTING.md": [],
+    "LOCAL_HARNESS.md": [],
+    "Makefile": [],
+    "README.md": [],
+    "apps/__init__.py": [],
+    "apps/api/__init__.py": [
+      "apps/api/app.py"
+    ],
+    "apps/api/__main__.py": [
+      "src/config.py"
+    ],
+    "apps/api/app.py": [
+      "src/api/jules_client.py",
+      "src/application/control_plane.py",
+      "src/bootstrap.py",
+      "src/config.py",
+      "src/infrastructure/local_store.py"
+    ],
+    "apps/web/app/globals.css": [],
+    "apps/web/app/layout.tsx": [
+      "apps/web/app/globals.css"
+    ],
+    "apps/web/app/page.tsx": [
+      "apps/web/components/studio-shell.tsx"
+    ],
+    "apps/web/components/studio-shell.tsx": [
+      "apps/web/lib/api.ts",
+      "apps/web/lib/types.ts"
+    ],
+    "apps/web/lib/api.ts": [
+      "apps/web/lib/types.ts"
+    ],
+    "apps/web/lib/types.ts": [],
+    "apps/web/next-env.d.ts": [],
+    "apps/web/next.config.mjs": [],
+    "apps/web/package.json": [],
+    "apps/web/pnpm-workspace.yaml": [],
+    "apps/web/tsconfig.json": [],
+    "docs/JULES_API_REFERENCE_NOTES.md": [],
+    "docs/SHOWCASE_CAPTURE_NOTES.md": [],
+    "docs/VERIFICATION.md": [],
+    "docs/images/studio-activity.webp": [],
+    "docs/images/studio-sessions.webp": [],
+    "docs/images/studio-workspace.webp": [],
+    "jules_api_audit_notes.md": [],
+    "jules_ui_design.md": [],
+    "render.yaml": [],
+    "requirements.txt": [],
+    "scripts/run_local.py": [],
+    "src/__init__.py": [],
+    "src/api/__init__.py": [
+      "src/api/jules_client.py"
+    ],
+    "src/api/jules_client.py": [],
+    "src/application/__init__.py": [
+      "src/application/harness.py"
+    ],
+    "src/application/control_plane.py": [
+      "src/application/harness.py",
+      "src/domain/agent.py",
+      "src/infrastructure/local_store.py"
+    ],
+    "src/application/harness.py": [
+      "src/domain/agent.py"
+    ],
+    "src/bootstrap.py": [
+      "src/api/jules_client.py",
+      "src/application/harness.py",
+      "src/config.py",
+      "src/infrastructure/agents/jules_agent.py"
+    ],
+    "src/config.py": [],
+    "src/domain/__init__.py": [
+      "src/domain/agent.py"
+    ],
+    "src/domain/agent.py": [],
+    "src/handlers/__init__.py": [
+      "src/handlers/message_handlers.py"
+    ],
+    "src/handlers/message_handlers.py": [
+      "src/api/jules_client.py",
+      "src/application/harness.py",
+      "src/domain/agent.py"
+    ],
+    "src/infrastructure/__init__.py": [
+      "src/infrastructure/local_store.py"
+    ],
+    "src/infrastructure/agents/__init__.py": [
+      "src/infrastructure/agents/jules_agent.py"
+    ],
+    "src/infrastructure/agents/jules_agent.py": [
+      "src/api/jules_client.py",
+      "src/config.py",
+      "src/domain/agent.py"
+    ],
+    "src/infrastructure/local_store.py": [
+      "src/application/harness.py",
+      "src/domain/agent.py"
+    ],
+    "src/main.py": [
+      "src/api/jules_client.py",
+      "src/application/harness.py",
+      "src/bootstrap.py",
+      "src/config.py",
+      "src/handlers/message_handlers.py"
+    ],
+    "tests/__init__.py": [],
+    "tests/test_composition.py": [
+      "src/application/harness.py",
+      "src/config.py",
+      "src/main.py"
+    ],
+    "tests/test_control_plane_api.py": [
+      "apps/api/app.py",
+      "src/application/control_plane.py",
+      "src/application/harness.py",
+      "src/config.py",
+      "src/domain/agent.py",
+      "src/infrastructure/local_store.py"
+    ],
+    "tests/test_harness.py": [
+      "src/application/harness.py",
+      "src/domain/agent.py"
+    ],
+    "tests/test_jules_activity_summary.py": [
+      "src/api/jules_client.py"
+    ]
+  }
+}

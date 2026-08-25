@@ -1,0 +1,3 @@
+[submodule "Understand-Anything"]
+	path = Understand-Anything
+	url = https://github.com/Egonex-AI/Understand-Anything.git

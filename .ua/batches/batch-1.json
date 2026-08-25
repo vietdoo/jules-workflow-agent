@@ -1,0 +1,71 @@
+{
+  "projectRoot": "/app",
+  "batchFiles": [
+    {
+      "path": ".env.example",
+      "language": "config",
+      "sizeLines": 37,
+      "fileCategory": "config"
+    },
+    {
+      "path": "ARCHITECTURE.md",
+      "language": "markdown",
+      "sizeLines": 36,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "CODE_OF_CONDUCT.md",
+      "language": "markdown",
+      "sizeLines": 131,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "CONTRIBUTING.md",
+      "language": "markdown",
+      "sizeLines": 33,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "LOCAL_HARNESS.md",
+      "language": "markdown",
+      "sizeLines": 83,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "Makefile",
+      "language": "makefile",
+      "sizeLines": 26,
+      "fileCategory": "infra"
+    },
+    {
+      "path": "README.md",
+      "language": "markdown",
+      "sizeLines": 361,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "jules_api_audit_notes.md",
+      "language": "markdown",
+      "sizeLines": 21,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "jules_ui_design.md",
+      "language": "markdown",
+      "sizeLines": 27,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "render.yaml",
+      "language": "yaml",
+      "sizeLines": 39,
+      "fileCategory": "config"
+    },
+    {
+      "path": "requirements.txt",
+      "language": "txt",
+      "sizeLines": 5,
+      "fileCategory": "docs"
+    }
+  ]
+}
